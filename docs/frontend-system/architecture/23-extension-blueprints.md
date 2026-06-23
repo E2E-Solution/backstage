@@ -74,15 +74,15 @@ Apart from the addition of the blueprint parameters of the first argument to the
 
 Some blueprints may be defined with something known as "advanced parameter types". This is a feature that enables type inference and transform of the blueprint parameters, and the way that you pass the parameters look a little bit different. Rather than passing the parameters directly, they are instead passed as a callback function of the form `defineParams => defineParams(<params>)`.
 
-An example of a blueprint that uses advanced parameter types is the `ApiBlueprint` blueprint. Using it to create a simple implementation for the `AlertApi` might look like this:
+An example of a blueprint that uses advanced parameter types is the `ApiBlueprint` blueprint. Using it to create a simple implementation for the `ToastApi` might look like this:
 
 ```ts
-const alertApiBlueprint = ApiBlueprint.make({
+const toastApiBlueprint = ApiBlueprint.make({
   params: defineParams =>
     defineParams({
-      api: alertApiRef,
+      api: toastApiRef,
       deps: {},
-      factory: () => new MyAlertApi(),
+      factory: () => new MyToastApi(),
     }),
 });
 ```
@@ -90,13 +90,13 @@ const alertApiBlueprint = ApiBlueprint.make({
 This also works with `makeWithOverrides`, where the define callback is passed as the first argument to the original factory:
 
 ```ts
-const alertApiBlueprint = ApiBlueprint.makeWithOverrides({
+const toastApiBlueprint = ApiBlueprint.makeWithOverrides({
   factory(originalFactory, { config }) {
     return originalFactory(defineParams =>
       defineParams({
-        api: alertApiRef,
+        api: toastApiRef,
         deps: {},
-        factory: () => new MyAlertApi(config),
+        factory: () => new MyToastApi(config),
       }),
     );
   },

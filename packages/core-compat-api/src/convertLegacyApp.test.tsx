@@ -81,12 +81,14 @@ describe('convertLegacyApp', () => {
 
     expect(
       collected.map((p: any /* TODO */) => ({
-        id: p.id,
+        id: p.pluginId,
         extensions: p.extensions.map((e: any) => ({
           id: e.id,
           attachTo: e.attachTo,
           disabled: e.disabled,
-          defaultConfig: e.configSchema?.parse({}),
+          ...(e.configSchema
+            ? { defaultConfig: e.configSchema.parse({}) }
+            : {}),
         })),
       })),
     ).toEqual([
@@ -124,7 +126,7 @@ describe('convertLegacyApp', () => {
         ],
       },
       {
-        id: undefined,
+        id: 'app',
         extensions: [
           {
             id: 'app/layout',
@@ -152,12 +154,14 @@ describe('convertLegacyApp', () => {
 
     expect(
       collected.map((p: any /* TODO */) => ({
-        id: p.id,
+        id: p.pluginId,
         extensions: p.extensions.map((e: any) => ({
           id: e.id,
           attachTo: e.attachTo,
           disabled: e.disabled,
-          defaultConfig: e.configSchema?.parse({}),
+          ...(e.configSchema
+            ? { defaultConfig: e.configSchema.parse({}) }
+            : {}),
         })),
       })),
     ).toEqual([

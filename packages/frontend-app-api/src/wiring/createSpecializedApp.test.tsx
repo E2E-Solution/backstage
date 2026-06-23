@@ -32,9 +32,10 @@ import {
   createExtensionDataRef,
 } from '@backstage/frontend-plugin-api';
 import { act, render, screen } from '@testing-library/react';
-import { createSpecializedApp } from './createSpecializedApp';
 import {
+  createSessionStateFromApis,
   FinalizedSpecializedApp,
+  PrepareSpecializedAppOptions,
   prepareSpecializedApp,
   PreparedSpecializedApp,
 } from './prepareSpecializedApp';
@@ -49,6 +50,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { ApiProvider, ConfigReader } from '@backstage/core-app-api';
 import { ComponentType, Fragment, useEffect, useState } from 'react';
 import appPluginOriginal from '@backstage/plugin-app';
+import { z } from 'zod/v4';
 
 const signInPageComponentDataRef = createExtensionDataRef<
   ComponentType<{ onSignInSuccess(identity: IdentityApi): void }>
@@ -83,7 +85,11 @@ async function waitForFinalizedApp(preparedApp: PreparedSpecializedApp) {
   });
 }
 
-describe('createSpecializedApp', () => {
+function finalizeSpecializedApp(options?: PrepareSpecializedAppOptions) {
+  return prepareSpecializedApp(options).finalize();
+}
+
+describe('specialized app', () => {
   const appPlugin = appPluginOriginal.withOverrides({
     extensions: [
       appPluginOriginal.getExtension('app/layout').override({
@@ -93,7 +99,7 @@ describe('createSpecializedApp', () => {
   });
 
   it('should render the root app', () => {
-    const app = createSpecializedApp({
+    const app = finalizeSpecializedApp({
       features: [makeAppPlugin()],
     });
 
@@ -103,7 +109,7 @@ describe('createSpecializedApp', () => {
   });
 
   it('should deduplicate features keeping the last received one', () => {
-    const app = createSpecializedApp({
+    const app = finalizeSpecializedApp({
       features: [makeAppPlugin('Test 1'), makeAppPlugin('Test 2')],
     });
 
@@ -113,7 +119,7 @@ describe('createSpecializedApp', () => {
   });
 
   it('should forward config', () => {
-    const app = createSpecializedApp({
+    const app = finalizeSpecializedApp({
       config: mockApis.config({ data: { test: 'foo' } }),
       features: [
         createFrontendPlugin({
@@ -139,7 +145,7 @@ describe('createSpecializedApp', () => {
   });
 
   it('should warn and ignore bootstrap-visible if predicates', () => {
-    const app = createSpecializedApp({
+    const app = finalizeSpecializedApp({
       features: [
         createFrontendPlugin({
           pluginId: 'test',
@@ -170,7 +176,7 @@ describe('createSpecializedApp', () => {
 
   it('should support APIs and feature flags', async () => {
     const flags = new Array<{ name: string; pluginId: string }>();
-    const app = createSpecializedApp({
+    const app = finalizeSpecializedApp({
       features: [
         createFrontendPlugin({
           pluginId: 'test',
@@ -230,7 +236,7 @@ describe('createSpecializedApp', () => {
   it('should initialize the APIs in the correct order to allow for overrides', () => {
     const mockAnalyticsApi = jest.fn(() => ({ captureEvent: jest.fn() }));
 
-    const app = createSpecializedApp({
+    const app = finalizeSpecializedApp({
       features: [
         makeAppPlugin(),
         createFrontendModule({
@@ -295,7 +301,9 @@ describe('createSpecializedApp', () => {
   });
 
   it('should select the API factory from the owning plugin on conflict', () => {
-    const testApiRef = createApiRef<{ value: string }>({ id: 'test.api' });
+    const testApiRef = createApiRef<{ value: string }>().with({
+      id: 'test.api',
+    });
     const appRootPlugin = createFrontendPlugin({
       pluginId: 'app',
       extensions: [
@@ -311,7 +319,7 @@ describe('createSpecializedApp', () => {
       ],
     });
 
-    const app = createSpecializedApp({
+    const app = finalizeSpecializedApp({
       features: [
         appRootPlugin,
         createFrontendPlugin({
@@ -372,7 +380,9 @@ describe('createSpecializedApp', () => {
   });
 
   it('should allow API overrides within the same plugin', () => {
-    const testApiRef = createApiRef<{ value: string }>({ id: 'test.api' });
+    const testApiRef = createApiRef<{ value: string }>().with({
+      id: 'test.api',
+    });
     const appRootPlugin = createFrontendPlugin({
       pluginId: 'app',
       extensions: [
@@ -388,7 +398,7 @@ describe('createSpecializedApp', () => {
       ],
     });
 
-    const app = createSpecializedApp({
+    const app = finalizeSpecializedApp({
       features: [
         appRootPlugin,
         createFrontendPlugin({
@@ -426,8 +436,10 @@ describe('createSpecializedApp', () => {
   });
 
   it('should reuse provided apis', async () => {
-    const testApiRef = createApiRef<{ value: string }>({ id: 'test.api' });
-    const app = createSpecializedApp({
+    const testApiRef = createApiRef<{ value: string }>().with({
+      id: 'test.api',
+    });
+    const app = finalizeSpecializedApp({
       features: [
         createFrontendPlugin({
           pluginId: 'test',
@@ -449,9 +461,11 @@ describe('createSpecializedApp', () => {
         }),
       ],
       advanced: {
-        apis: TestApiRegistry.from(
-          [configApiRef, new ConfigReader({ anything: 'config' })],
-          [testApiRef, { value: 'from-apis' }],
+        sessionState: createSessionStateFromApis(
+          TestApiRegistry.from(
+            [configApiRef, new ConfigReader({ anything: 'config' })],
+            [testApiRef, { value: 'from-apis' }],
+          ),
         ),
       },
     });
@@ -464,7 +478,7 @@ describe('createSpecializedApp', () => {
   it('should make the app structure available through the AppTreeApi', async () => {
     let appTreeApi: AppTreeApi | undefined = undefined;
 
-    const { tree } = createSpecializedApp({
+    const { tree } = finalizeSpecializedApp({
       features: [
         createFrontendPlugin({
           pluginId: 'test',
@@ -613,7 +627,7 @@ describe('createSpecializedApp', () => {
     });
 
     render(
-      createSpecializedApp({
+      finalizeSpecializedApp({
         features: [pluginA, pluginB],
         bindRoutes({ bind }) {
           bind(pluginA.externalRoutes, { ext: pluginB.routes.root });
@@ -627,7 +641,7 @@ describe('createSpecializedApp', () => {
   it('should support multiple attachment points', async () => {
     let appTreeApi: AppTreeApi | undefined = undefined;
 
-    createSpecializedApp({
+    finalizeSpecializedApp({
       features: [
         createFrontendPlugin({
           pluginId: 'test',
@@ -708,7 +722,7 @@ describe('createSpecializedApp', () => {
   it('should apply multiple middlewares in order', () => {
     const textDataRef = createExtensionDataRef<string>().with({ id: 'text' });
 
-    const app = createSpecializedApp({
+    const app = finalizeSpecializedApp({
       features: [
         createFrontendPlugin({
           pluginId: 'test',
@@ -730,10 +744,8 @@ describe('createSpecializedApp', () => {
             createExtension({
               name: 'child',
               attachTo: { id: 'test', input: 'text' },
-              config: {
-                schema: {
-                  text: z => z.string().default('test'),
-                },
+              configSchema: {
+                text: z.string().default('test'),
               },
               output: [textDataRef],
               factory: ({ config }) => [textDataRef(config.text)],
@@ -791,7 +803,7 @@ describe('createSpecializedApp', () => {
         "Attempted to load plugin info for plugin 'test', but the plugin instance is not installed in an app";
       await expect(plugin.info()).rejects.toThrow(errorMsg);
 
-      const app = createSpecializedApp({ features: [plugin] });
+      const app = finalizeSpecializedApp({ features: [plugin] });
 
       await expect(plugin.info()).rejects.toThrow(errorMsg);
 
@@ -810,7 +822,7 @@ describe('createSpecializedApp', () => {
         extensions: [testExtension],
       });
 
-      const app = createSpecializedApp({ features: [plugin] });
+      const app = finalizeSpecializedApp({ features: [plugin] });
       const info = await app.tree.nodes.get('test')?.spec.plugin?.info();
       expect(info).toMatchObject({
         packageName: '@backstage/frontend-app-api',
@@ -833,7 +845,7 @@ describe('createSpecializedApp', () => {
         },
       });
 
-      const app = createSpecializedApp({ features: [overriddenPlugin] });
+      const app = finalizeSpecializedApp({ features: [overriddenPlugin] });
       const info = await app.tree.nodes.get('test')?.spec.plugin?.info();
       expect(info).toMatchObject({
         packageName: 'test-override',
@@ -857,7 +869,7 @@ describe('createSpecializedApp', () => {
         extensions: [testExtension],
       });
 
-      const app = createSpecializedApp({ features: [plugin] });
+      const app = finalizeSpecializedApp({ features: [plugin] });
       const info = await app.tree.nodes.get('test')?.spec.plugin?.info();
       expect(info).toEqual({
         packageName: '@backstage/frontend-app-api',
@@ -876,7 +888,7 @@ describe('createSpecializedApp', () => {
         extensions: [testExtension],
       });
 
-      const app = createSpecializedApp({
+      const app = finalizeSpecializedApp({
         features: [plugin],
         advanced: {
           pluginInfoResolver: async ctx => {
@@ -897,7 +909,7 @@ describe('createSpecializedApp', () => {
 
   describe('prepareSpecializedApp', () => {
     it('should accept session state through advanced options', () => {
-      const originalApp = createSpecializedApp({
+      const originalApp = finalizeSpecializedApp({
         features: [makeAppPlugin('Original')],
       });
       const preparedApp = prepareSpecializedApp({
@@ -1025,7 +1037,9 @@ describe('createSpecializedApp', () => {
         name: 'visible-api',
         params: defineParams =>
           defineParams({
-            api: createApiRef<{ value: string }>({ id: 'test.visible-api' }),
+            api: createApiRef<{ value: string }>().with({
+              id: 'test.visible-api',
+            }),
             deps: {},
             factory: () => ({ value: 'visible' }),
           }),
@@ -1034,7 +1048,9 @@ describe('createSpecializedApp', () => {
         name: 'deferred-api',
         params: defineParams =>
           defineParams({
-            api: createApiRef<{ value: string }>({ id: 'test.deferred-api' }),
+            api: createApiRef<{ value: string }>().with({
+              id: 'test.deferred-api',
+            }),
             deps: {},
             factory: () => ({ value: 'deferred' }),
           }),
@@ -1084,7 +1100,7 @@ describe('createSpecializedApp', () => {
     });
 
     it('should ignore deferred overrides of materialized bootstrap APIs', () => {
-      const apiRef = createApiRef<{ value: string }>({
+      const apiRef = createApiRef<{ value: string }>().with({
         id: 'test.bootstrap-frozen-api',
       });
       let bootstrapApiValue: string | undefined;
@@ -1190,7 +1206,7 @@ describe('createSpecializedApp', () => {
     });
 
     it('should allow deferred overrides of bootstrap APIs that were not materialized', () => {
-      const apiRef = createApiRef<{ value: string }>({
+      const apiRef = createApiRef<{ value: string }>().with({
         id: 'test.bootstrap-overridable-api',
       });
       let finalApiValue: string | undefined;
@@ -1635,7 +1651,7 @@ describe('createSpecializedApp', () => {
         getCredentials: async () => ({ token: 'token' }),
         signOut: async () => {},
       };
-      const delayedApiRef = createApiRef<{ value: string }>({
+      const delayedApiRef = createApiRef<{ value: string }>().with({
         id: 'test.delayed-api',
       });
       const featureFlagsApi = {

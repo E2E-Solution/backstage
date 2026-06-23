@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { renderHook } from '@testing-library/react';
+import { render, renderHook, screen } from '@testing-library/react';
 import { PropsWithChildren } from 'react';
 import { createVersionedContextForTesting } from '@backstage/version-bridge';
 import {
@@ -48,19 +48,15 @@ describe('useApp', () => {
   });
 
   describe('new system', () => {
-    const mockIcon = () => null;
     const mockIconsApi: IconsApi = {
       icon: jest.fn((key: string) =>
-        key === 'test-icon' ? mockIcon() : undefined,
-      ),
-      getIcon: jest.fn((key: string) =>
-        key === 'test-icon' ? mockIcon : undefined,
+        key === 'test-icon' ? <span aria-label="test icon" /> : undefined,
       ),
       listIconKeys: jest.fn(() => ['test-icon']),
     };
 
     const mockPlugin = {
-      id: 'test-plugin',
+      pluginId: 'test-plugin',
     };
 
     const mockAppNode: AppNode = {
@@ -105,8 +101,14 @@ describe('useApp', () => {
       expect(appContext).toBeDefined();
       expect(appContext.getPlugins()).toHaveLength(1);
       expect(appContext.getPlugins()[0].getId()).toBe('test-plugin');
-      expect(appContext.getSystemIcon('test-icon')).toBe(mockIcon);
-      expect(appContext.getSystemIcons()).toEqual({ 'test-icon': mockIcon });
+      const SystemIcon = appContext.getSystemIcon('test-icon')!;
+      const systemIcons = appContext.getSystemIcons();
+      expect(SystemIcon).toBeDefined();
+      expect(systemIcons['test-icon']).toBe(SystemIcon);
+      render(<SystemIcon fontSize="large" />);
+      expect(screen.getByLabelText('test icon')).toHaveStyle({
+        fontSize: '2.1875rem',
+      });
       expect(appContext.getComponents().Progress).toBeDefined();
       expect(appContext.getComponents().NotFoundErrorPage).toBeDefined();
     });

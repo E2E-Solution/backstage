@@ -32,7 +32,7 @@ exported with a name of the pattern `*ApiRef`, for example
 To access one of the Utility APIs inside a React component, use the
 [`useApi`](https://backstage.io/api/stable/functions/_backstage_frontend-plugin-api.index.useApi.html) hook exported by
 [`@backstage/core-plugin-api`](https://backstage.io/api/stable/modules/_backstage_core-plugin-api.html), or the
-[`withApis`](https://backstage.io/api/stable/functions/_backstage_frontend-plugin-api.index.withApis.html) HOC if you prefer class
+[`withApis`](https://backstage.io/api/stable/functions/_backstage_core-plugin-api.index.withApis.html) HOC if you prefer class
 components. For example, the
 [`ErrorApi`](https://backstage.io/api/stable/types/_backstage_frontend-plugin-api.index.ErrorApi.html) can be accessed like this:
 
@@ -92,7 +92,7 @@ createApiFactory({
 In this example, the [`errorApiRef`](https://backstage.io/api/stable/variables/_backstage_frontend-plugin-api.index.errorApiRef.html)
 is our API, which encapsulates the
 [`ErrorApi`](https://backstage.io/api/stable/types/_backstage_frontend-plugin-api.index.ErrorApi.html) type. The
-[`alertApiRef`](https://backstage.io/api/stable/variables/_backstage_frontend-plugin-api.index.alertApiRef.html) is our single
+[`alertApiRef`](https://backstage.io/api/stable/variables/_backstage_core-plugin-api.index.alertApiRef.html) is our single
 dependency, which we give the name `alertApi`, and is then passed on to the
 factory function, which returns an implementation of the
 [`ErrorApi`](https://backstage.io/api/stable/types/_backstage_frontend-plugin-api.index.ErrorApi.html).

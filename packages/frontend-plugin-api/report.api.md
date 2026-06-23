@@ -20,29 +20,9 @@ import { JsonValue } from '@backstage/types';
 import { JSX as JSX_2 } from 'react';
 import { JSX as JSX_3 } from 'react/jsx-runtime';
 import { Observable } from '@backstage/types';
-import { PropsWithChildren } from 'react';
 import { ReactNode } from 'react';
 import { StandardSchemaV1 } from '@standard-schema/spec';
 import { SwappableComponentRef as SwappableComponentRef_2 } from '@backstage/frontend-plugin-api';
-import type { z } from 'zod/v3';
-
-// @public @deprecated
-export type AlertApi = {
-  post(alert: AlertMessage): void;
-  alert$(): Observable<AlertMessage>;
-};
-
-// @public @deprecated
-export const alertApiRef: ApiRef_2<AlertApi, 'core.alert'> & {
-  readonly $$type: '@backstage/ApiRef';
-};
-
-// @public @deprecated
-export type AlertMessage = {
-  message: string;
-  severity?: 'success' | 'info' | 'warning' | 'error';
-  display?: 'permanent' | 'transient';
-};
 
 // @public
 export type AnalyticsApi = {
@@ -85,39 +65,6 @@ export type AnalyticsEventAttributes = {
 // @public
 export type AnalyticsImplementation = {
   captureEvent(event: AnalyticsEvent): void;
-};
-
-// @public @deprecated
-export const AnalyticsImplementationBlueprint: ExtensionBlueprint_2<{
-  kind: 'analytics';
-  params: <TDeps extends { [name in string]: unknown }>(
-    params: AnalyticsImplementationFactory<TDeps>,
-  ) => ExtensionBlueprintParams_2<AnalyticsImplementationFactory<{}>>;
-  output: ExtensionDataRef_2<
-    AnalyticsImplementationFactory<{}>,
-    'core.analytics.factory',
-    {}
-  >;
-  inputs: {};
-  config: {};
-  configInput: {};
-  dataRefs: {
-    factory: ConfigurableExtensionDataRef_2<
-      AnalyticsImplementationFactory<{}>,
-      'core.analytics.factory',
-      {}
-    >;
-  };
-}>;
-
-// @public @deprecated (undocumented)
-export type AnalyticsImplementationFactory<
-  Deps extends {
-    [name in string]: unknown;
-  } = {},
-> = {
-  deps: TypesToApiRefs<Deps>;
-  factory(deps: Deps): AnalyticsImplementation;
 };
 
 // @public
@@ -334,7 +281,11 @@ export const atlassianAuthApiRef: ApiRef_2<
 export type AuthProviderInfo = {
   id: string;
   title: string;
-  icon: IconComponent | IconElement;
+  icon:
+    | ComponentType<{
+        fontSize?: 'medium' | 'large' | 'small' | 'inherit';
+      }>
+    | IconElement;
   message?: string;
 };
 
@@ -441,11 +392,6 @@ export function createApiFactory<Api, Impl extends Api>(
   instance: Impl,
 ): ApiFactory<Api, Impl, {}>;
 
-// @public @deprecated
-export function createApiRef<T>(config: ApiRefConfig): ApiRef<T> & {
-  readonly $$type: '@backstage/ApiRef';
-};
-
 // @public
 export function createApiRef<T>(): {
   with<const TId extends string>(
@@ -477,13 +423,10 @@ export function createExtension<
     TName,
     UOutput,
     TInputs,
-    {},
     UFactoryOutput,
     UParentInputs,
     TNewConfigSchema
-  > & {
-    config?: never;
-  },
+  >,
 ): OverridableExtensionDefinition<{
   config: {
     [key in keyof TNewConfigSchema]: StandardSchemaV1.InferOutput<
@@ -495,62 +438,6 @@ export function createExtension<
       TNewConfigSchema[key]
     >;
   };
-  output: UOutput extends ExtensionDataRef<
-    infer IData,
-    infer IId,
-    infer IConfig
-  >
-    ? ExtensionDataRef<IData, IId, IConfig>
-    : never;
-  inputs: TInputs;
-  params: never;
-  kind: string | undefined extends TKind ? undefined : TKind;
-  name: string | undefined extends TName ? undefined : TName;
-}>;
-
-// @public @deprecated (undocumented)
-export function createExtension<
-  UOutput extends ExtensionDataRef,
-  TInputs extends {
-    [inputName in string]: ExtensionInput;
-  },
-  TConfigSchema extends {
-    [key: string]: (zImpl: typeof z) => z.ZodType;
-  },
-  UFactoryOutput extends ExtensionDataValue<any, any>,
-  const TKind extends string | undefined = undefined,
-  const TName extends string | undefined = undefined,
-  UParentInputs extends ExtensionDataRef = ExtensionDataRef,
->(
-  options: CreateExtensionOptions<
-    TKind,
-    TName,
-    UOutput,
-    TInputs,
-    TConfigSchema,
-    UFactoryOutput,
-    UParentInputs,
-    {}
-  > & {
-    configSchema?: never;
-  },
-): OverridableExtensionDefinition<{
-  config: string extends keyof TConfigSchema
-    ? {}
-    : {
-        [key in keyof TConfigSchema]: z.infer<
-          ReturnType<((...args: any[]) => any) & TConfigSchema[key]>
-        >;
-      };
-  configInput: string extends keyof TConfigSchema
-    ? {}
-    : z.input<
-        z.ZodObject<{
-          [key in keyof TConfigSchema]: ReturnType<
-            ((...args: any[]) => any) & TConfigSchema[key]
-          >;
-        }>
-      >;
   output: UOutput extends ExtensionDataRef<
     infer IData,
     infer IId,
@@ -589,7 +476,6 @@ export function createExtensionBlueprint<
     if?: FilterPredicate;
     inputs?: TInputs;
     output: Array<UOutput>;
-    config?: never;
     configSchema?: TNewConfigSchema;
     defineParams?: TParams extends ExtensionBlueprintDefineParams
       ? TParams
@@ -635,85 +521,6 @@ export function createExtensionBlueprint<
   dataRefs: TDataRefs;
 }>;
 
-// @public @deprecated (undocumented)
-export function createExtensionBlueprint<
-  TParams extends object | ExtensionBlueprintDefineParams,
-  UOutput extends ExtensionDataRef,
-  TInputs extends {
-    [inputName in string]: ExtensionInput;
-  },
-  TConfigSchema extends {
-    [key in string]: (zImpl: typeof z) => z.ZodType;
-  },
-  UFactoryOutput extends ExtensionDataValue<any, any>,
-  TKind extends string,
-  UParentInputs extends ExtensionDataRef,
-  TDataRefs extends {
-    [name in string]: ExtensionDataRef;
-  } = never,
->(
-  options: {
-    kind: TKind;
-    attachTo: ExtensionDefinitionAttachTo<UParentInputs> &
-      VerifyExtensionAttachTo<UOutput, UParentInputs>;
-    disabled?: boolean;
-    if?: FilterPredicate;
-    inputs?: TInputs;
-    output: Array<UOutput>;
-    configSchema?: never;
-    config?: {
-      schema: TConfigSchema;
-    };
-    defineParams?: TParams extends ExtensionBlueprintDefineParams
-      ? TParams
-      : 'The defineParams option must be a function if provided, see the docs for details';
-    factory(
-      params: TParams extends ExtensionBlueprintDefineParams
-        ? ReturnType<TParams>['T']
-        : TParams,
-      context: {
-        node: AppNode;
-        apis: ApiHolder;
-        config: {
-          [key in keyof TConfigSchema]: z.infer<
-            ReturnType<((...args: any[]) => any) & TConfigSchema[key]>
-          >;
-        };
-        inputs: Expand<ResolvedExtensionInputs<TInputs>>;
-      },
-    ): Iterable<UFactoryOutput>;
-    dataRefs?: TDataRefs;
-  } & VerifyExtensionFactoryOutput<UOutput, UFactoryOutput>,
-): ExtensionBlueprint<{
-  kind: TKind;
-  params: TParams;
-  output: UOutput extends ExtensionDataRef<
-    infer IData,
-    infer IId,
-    infer IConfig
-  >
-    ? ExtensionDataRef<IData, IId, IConfig>
-    : never;
-  inputs: string extends keyof TInputs ? {} : TInputs;
-  config: string extends keyof TConfigSchema
-    ? {}
-    : {
-        [key in keyof TConfigSchema]: z.infer<
-          ReturnType<((...args: any[]) => any) & TConfigSchema[key]>
-        >;
-      };
-  configInput: string extends keyof TConfigSchema
-    ? {}
-    : z.input<
-        z.ZodObject<{
-          [key in keyof TConfigSchema]: ReturnType<
-            ((...args: any[]) => any) & TConfigSchema[key]
-          >;
-        }>
-      >;
-  dataRefs: TDataRefs;
-}>;
-
 // @public (undocumented)
 export type CreateExtensionBlueprintOptions<
   TKind extends string,
@@ -721,9 +528,6 @@ export type CreateExtensionBlueprintOptions<
   UOutput extends ExtensionDataRef,
   TInputs extends {
     [inputName in string]: ExtensionInput;
-  },
-  TConfigSchema extends {
-    [key in string]: (zImpl: typeof z) => z.ZodType;
   },
   UFactoryOutput extends ExtensionDataValue<any, any>,
   TDataRefs extends {
@@ -742,9 +546,6 @@ export type CreateExtensionBlueprintOptions<
   inputs?: TInputs;
   output: Array<UOutput>;
   configSchema?: TNewConfigSchema;
-  config?: {
-    schema: TConfigSchema;
-  };
   defineParams?: TParams extends ExtensionBlueprintDefineParams
     ? TParams
     : 'The defineParams option must be a function if provided, see the docs for details';
@@ -758,10 +559,6 @@ export type CreateExtensionBlueprintOptions<
       config: {
         [key in keyof TNewConfigSchema]: StandardSchemaV1.InferOutput<
           TNewConfigSchema[key]
-        >;
-      } & {
-        [key in keyof TConfigSchema]: z.infer<
-          ReturnType<((...args: any[]) => any) & TConfigSchema[key]>
         >;
       };
       inputs: Expand<ResolvedExtensionInputs<TInputs>>;
@@ -821,9 +618,6 @@ export type CreateExtensionOptions<
   TInputs extends {
     [inputName in string]: ExtensionInput;
   },
-  TConfigSchema extends {
-    [key: string]: (zImpl: typeof z) => z.ZodType;
-  },
   UFactoryOutput extends ExtensionDataValue<any, any>,
   UParentInputs extends ExtensionDataRef,
   TNewConfigSchema extends {
@@ -839,19 +633,12 @@ export type CreateExtensionOptions<
   inputs?: TInputs;
   output: Array<UOutput>;
   configSchema?: TNewConfigSchema;
-  config?: {
-    schema: TConfigSchema;
-  };
   factory(context: {
     node: AppNode;
     apis: ApiHolder;
     config: {
       [key in keyof TNewConfigSchema]: StandardSchemaV1.InferOutput<
         TNewConfigSchema[key]
-      >;
-    } & {
-      [key in keyof TConfigSchema]: z.infer<
-        ReturnType<((...args: any[]) => any) & TConfigSchema[key]>
       >;
     };
     inputs: Expand<ResolvedExtensionInputs<TInputs>>;
@@ -1087,20 +874,6 @@ export interface DialogApi {
       | JSX.Element
       | ((props: { dialog: DialogApiDialog<TResult> }) => JSX.Element),
   ): DialogApiDialog<TResult>;
-  // @deprecated
-  show<TResult = void>(
-    elementOrComponent:
-      | JSX.Element
-      | ((props: {
-          dialog: DialogApiDialog<TResult | undefined>;
-        }) => JSX.Element),
-  ): DialogApiDialog<TResult | undefined>;
-  // @deprecated
-  showModal<TResult = void>(
-    elementOrComponent:
-      | JSX.Element
-      | ((props: { dialog: DialogApiDialog<TResult> }) => JSX.Element),
-  ): DialogApiDialog<TResult>;
 }
 
 // @public
@@ -1305,103 +1078,6 @@ export interface ExtensionBlueprint<
     name: string | undefined extends TName ? undefined : TName;
     params: T['params'];
   }>;
-  // @deprecated (undocumented)
-  makeWithOverrides<
-    TName extends string | undefined,
-    TExtensionConfigSchema extends {
-      [key in string]: (zImpl: typeof z) => z.ZodType;
-    },
-    UFactoryOutput extends ExtensionDataValue<any, any>,
-    UNewOutput extends ExtensionDataRef,
-    UParentInputs extends ExtensionDataRef,
-    TExtraInputs extends {
-      [inputName in string]: ExtensionInput;
-    } = {},
-  >(args: {
-    name?: TName;
-    attachTo?: ExtensionDefinitionAttachTo<UParentInputs> &
-      VerifyExtensionAttachTo<
-        ExtensionDataRef extends UNewOutput
-          ? NonNullable<T['output']>
-          : UNewOutput,
-        UParentInputs
-      >;
-    disabled?: boolean;
-    if?: FilterPredicate;
-    inputs?: TExtraInputs & {
-      [KName in keyof T['inputs']]?: `Error: Input '${KName &
-        string}' is already defined in parent definition`;
-    };
-    output?: Array<UNewOutput>;
-    configSchema?: never;
-    config?: {
-      schema: TExtensionConfigSchema & {
-        [KName in keyof T['config']]?: `Error: Config key '${KName &
-          string}' is already defined in parent schema`;
-      };
-    };
-    factory(
-      originalFactory: <
-        TParamsInput extends AnyParamsInput_2<NonNullable<T['params']>>,
-      >(
-        params: TParamsInput extends ExtensionBlueprintDefineParams
-          ? TParamsInput
-          : T['params'] extends ExtensionBlueprintDefineParams
-          ? 'Error: This blueprint uses advanced parameter types and requires you to pass parameters as using the following callback syntax: `originalFactory(defineParams => defineParams(<params>))`'
-          : T['params'],
-        context?: {
-          config?: T['config'];
-          inputs?: ResolvedInputValueOverrides<NonNullable<T['inputs']>>;
-        },
-      ) => ExtensionDataContainer<NonNullable<T['output']>>,
-      context: {
-        node: AppNode;
-        apis: ApiHolder;
-        config: T['config'] & {
-          [key in keyof TExtensionConfigSchema]: z.infer<
-            ReturnType<((...args: any[]) => any) & TExtensionConfigSchema[key]>
-          >;
-        };
-        inputs: Expand<ResolvedExtensionInputs<T['inputs'] & TExtraInputs>>;
-      },
-    ): Iterable<UFactoryOutput> &
-      VerifyExtensionFactoryOutput<
-        ExtensionDataRef extends UNewOutput
-          ? NonNullable<T['output']>
-          : UNewOutput,
-        UFactoryOutput
-      >;
-  }): OverridableExtensionDefinition<{
-    config: Expand<
-      (string extends keyof TExtensionConfigSchema
-        ? {}
-        : {
-            [key in keyof TExtensionConfigSchema]: z.infer<
-              ReturnType<
-                ((...args: any[]) => any) & TExtensionConfigSchema[key]
-              >
-            >;
-          }) &
-        T['config']
-    >;
-    configInput: Expand<
-      (string extends keyof TExtensionConfigSchema
-        ? {}
-        : z.input<
-            z.ZodObject<{
-              [key in keyof TExtensionConfigSchema]: ReturnType<
-                ((...args: any[]) => any) & TExtensionConfigSchema[key]
-              >;
-            }>
-          >) &
-        T['configInput']
-    >;
-    output: ExtensionDataRef extends UNewOutput ? T['output'] : UNewOutput;
-    inputs: Expand<T['inputs'] & TExtraInputs>;
-    kind: T['kind'];
-    name: string | undefined extends TName ? undefined : TName;
-    params: T['params'];
-  }>;
 }
 
 // @public
@@ -1553,18 +1229,6 @@ export type ExtensionDefinitionParameters = {
   params?: object | ExtensionBlueprintDefineParams;
 };
 
-// @public @deprecated (undocumented)
-export type ExtensionFactoryMiddleware = (
-  originalFactory: (contextOverrides?: {
-    config?: JsonObject;
-  }) => ExtensionDataContainer<ExtensionDataRef>,
-  context: {
-    node: AppNode;
-    apis: ApiHolder;
-    config?: JsonObject;
-  },
-) => Iterable<ExtensionDataValue<any, any>>;
-
 // @public (undocumented)
 export interface ExtensionInput<
   UExtensionData extends ExtensionDataRef<
@@ -1709,8 +1373,6 @@ export interface FrontendPlugin<
   // (undocumented)
   readonly externalRoutes: TExternalRoutes;
   readonly icon?: IconElement;
-  // @deprecated
-  readonly id: string;
   info(): Promise<FrontendPluginInfo>;
   readonly pluginId: string;
   // (undocumented)
@@ -1772,18 +1434,11 @@ export const googleAuthApiRef: ApiRef_2<
   readonly $$type: '@backstage/ApiRef';
 };
 
-// @public @deprecated
-export type IconComponent = ComponentType<{
-  fontSize?: 'medium' | 'large' | 'small' | 'inherit';
-}>;
-
 // @public
 export type IconElement = JSX_2.Element | null;
 
 // @public
 export interface IconsApi {
-  // @deprecated (undocumented)
-  getIcon(key: string): IconComponent | undefined;
   icon(key: string): IconElement | undefined;
   // (undocumented)
   listIconKeys(): string[];
@@ -2014,111 +1669,6 @@ export interface OverridableExtensionDefinition<
       >;
     };
   }>;
-  // @deprecated (undocumented)
-  override<
-    TExtensionConfigSchema extends {
-      [key in string]: (zImpl: typeof z) => z.ZodType;
-    },
-    UFactoryOutput extends ExtensionDataValue<any, any>,
-    UNewOutput extends ExtensionDataRef,
-    TExtraInputs extends {
-      [inputName in string]: ExtensionInput;
-    },
-    TParamsInput extends AnyParamsInput<NonNullable<T['params']>>,
-    UParentInputs extends ExtensionDataRef,
-  >(
-    args: Expand<
-      {
-        attachTo?: ExtensionDefinitionAttachTo<UParentInputs> &
-          VerifyExtensionAttachTo<
-            ExtensionDataRef extends UNewOutput
-              ? NonNullable<T['output']>
-              : UNewOutput,
-            UParentInputs
-          >;
-        disabled?: boolean;
-        if?: FilterPredicate;
-        inputs?: TExtraInputs & {
-          [KName in keyof T['inputs']]?: `Error: Input '${KName &
-            string}' is already defined in parent definition`;
-        };
-        output?: Array<UNewOutput>;
-        configSchema?: never;
-        config?: {
-          schema: TExtensionConfigSchema & {
-            [KName in keyof T['config']]?: `Error: Config key '${KName &
-              string}' is already defined in parent schema`;
-          };
-        };
-        factory?(
-          originalFactory: <
-            TFactoryParamsReturn extends AnyParamsInput<
-              NonNullable<T['params']>
-            >,
-          >(
-            context?: Expand<
-              {
-                config?: T['config'];
-                inputs?: ResolvedInputValueOverrides<NonNullable<T['inputs']>>;
-              } & ([T['params']] extends [never]
-                ? {}
-                : {
-                    params?: TFactoryParamsReturn extends ExtensionBlueprintDefineParams
-                      ? TFactoryParamsReturn
-                      : T['params'] extends ExtensionBlueprintDefineParams
-                      ? 'Error: This blueprint uses advanced parameter types and requires you to pass parameters as using the following callback syntax: `originalFactory(defineParams => defineParams(<params>))`'
-                      : Partial<T['params']>;
-                  })
-            >,
-          ) => ExtensionDataContainer<NonNullable<T['output']>>,
-          context: {
-            node: AppNode;
-            apis: ApiHolder;
-            config: T['config'] & {
-              [key in keyof TExtensionConfigSchema]: z.infer<
-                ReturnType<
-                  ((...args: any[]) => any) & TExtensionConfigSchema[key]
-                >
-              >;
-            };
-            inputs: Expand<ResolvedExtensionInputs<T['inputs'] & TExtraInputs>>;
-          },
-        ): Iterable<UFactoryOutput>;
-      } & ([T['params']] extends [never]
-        ? {}
-        : {
-            params?: TParamsInput extends ExtensionBlueprintDefineParams
-              ? TParamsInput
-              : T['params'] extends ExtensionBlueprintDefineParams
-              ? 'Error: This blueprint uses advanced parameter types and requires you to pass parameters as using the following callback syntax: `originalFactory(defineParams => defineParams(<params>))`'
-              : Partial<T['params']>;
-          })
-    > &
-      VerifyExtensionFactoryOutput<
-        ExtensionDataRef extends UNewOutput
-          ? NonNullable<T['output']>
-          : UNewOutput,
-        UFactoryOutput
-      >,
-  ): OverridableExtensionDefinition<{
-    kind: T['kind'];
-    name: T['name'];
-    output: ExtensionDataRef extends UNewOutput ? T['output'] : UNewOutput;
-    inputs: T['inputs'] & TExtraInputs;
-    config: T['config'] & {
-      [key in keyof TExtensionConfigSchema]: z.infer<
-        ReturnType<((...args: any[]) => any) & TExtensionConfigSchema[key]>
-      >;
-    };
-    configInput: T['configInput'] &
-      z.input<
-        z.ZodObject<{
-          [key in keyof TExtensionConfigSchema]: ReturnType<
-            ((...args: any[]) => any) & TExtensionConfigSchema[key]
-          >;
-        }>
-      >;
-  }>;
 }
 
 // @public
@@ -2267,9 +1817,6 @@ export interface PageLayoutTab {
   label: string;
 }
 
-// @public @deprecated (undocumented)
-export type PageTab = PageLayoutTab;
-
 // @public
 export type PendingOAuthRequest = {
   provider: AuthProviderInfo;
@@ -2302,18 +1849,6 @@ export const pluginHeaderActionsApiRef: ApiRef_2<
 > & {
   readonly $$type: '@backstage/ApiRef';
 };
-
-// @public @deprecated (undocumented)
-export type PluginOptions<
-  TId extends string,
-  TRoutes extends {
-    [name in string]: RouteRef | SubRouteRef;
-  },
-  TExternalRoutes extends {
-    [name in string]: ExternalRouteRef;
-  },
-  TExtensions extends readonly ExtensionDefinition[],
-> = CreateFrontendPluginOptions<TId, TRoutes, TExternalRoutes, TExtensions>;
 
 // @public
 export type PluginWrapperApi = {
@@ -2820,15 +2355,5 @@ export const vmwareCloudAuthApiRef: ApiRef_2<
   'core.auth.vmware-cloud'
 > & {
   readonly $$type: '@backstage/ApiRef';
-};
-
-// @public @deprecated
-export function withApis<T extends {}>(
-  apis: TypesToApiRefs<T>,
-): <TProps extends T>(
-  WrappedComponent: ComponentType<TProps>,
-) => {
-  (props: PropsWithChildren<Omit<TProps, keyof T>>): JSX_3.Element;
-  displayName: string;
 };
 ```

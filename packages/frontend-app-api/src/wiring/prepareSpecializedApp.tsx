@@ -23,12 +23,12 @@ import {
   ConfigApi,
   coreExtensionData,
   AppNode,
-  ExtensionFactoryMiddleware,
   FrontendFeature,
   IdentityApi,
   identityApiRef,
   createExtensionDataRef,
 } from '@backstage/frontend-plugin-api';
+import { ExtensionFactoryMiddleware } from './types';
 import {
   createExtensionDataContainer,
   OpaqueFrontendPlugin,
@@ -101,10 +101,10 @@ function deduplicateFeatures(
       if (!OpaqueFrontendPlugin.isType(feature)) {
         return true;
       }
-      if (seenIds.has(feature.id)) {
+      if (seenIds.has(feature.pluginId!)) {
         return false;
       }
-      seenIds.add(feature.id);
+      seenIds.add(feature.pluginId!);
       return true;
     })
     .reverse();

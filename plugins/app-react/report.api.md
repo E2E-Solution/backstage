@@ -11,7 +11,7 @@ import { ConfigurableExtensionDataRef } from '@backstage/frontend-plugin-api';
 import { ExtensionBlueprint } from '@backstage/frontend-plugin-api';
 import { ExtensionBlueprintParams } from '@backstage/frontend-plugin-api';
 import { ExtensionDataRef } from '@backstage/frontend-plugin-api';
-import { IconComponent } from '@backstage/frontend-plugin-api';
+import { IconComponent } from '@backstage/core-plugin-api';
 import { IconElement } from '@backstage/frontend-plugin-api';
 import { IdentityApi } from '@backstage/frontend-plugin-api';
 import { ReactNode } from 'react';
@@ -58,7 +58,6 @@ export type AnalyticsImplementationFactory<
 export const AppRootWrapperBlueprint: ExtensionBlueprint<{
   kind: 'app-root-wrapper';
   params: {
-    Component?: [error: 'Use the `component` parameter instead'];
     component: (props: { children: ReactNode }) => JSX.Element | null;
   };
   output: ExtensionDataRef<
@@ -86,7 +85,7 @@ export const IconBundleBlueprint: ExtensionBlueprint<{
   };
   output: ExtensionDataRef<
     {
-      [x: string]: IconComponent | IconElement;
+      [x: string]: IconElement | IconComponent;
     },
     'core.icons',
     {}
@@ -97,7 +96,7 @@ export const IconBundleBlueprint: ExtensionBlueprint<{
   dataRefs: {
     icons: ConfigurableExtensionDataRef<
       {
-        [x: string]: IconComponent | IconElement;
+        [x: string]: IconElement | IconComponent;
       },
       'core.icons',
       {}
@@ -135,14 +134,6 @@ export type NavContentComponent = (
 
 // @public
 export interface NavContentComponentProps {
-  // @deprecated
-  items: Array<{
-    icon: IconComponent;
-    title: string;
-    routeRef: RouteRef<undefined>;
-    to: string;
-    text: string;
-  }>;
   navItems: NavContentNavItems;
 }
 
@@ -175,7 +166,6 @@ export interface NavContentNavItemsWithComponent {
 export const RouterBlueprint: ExtensionBlueprint<{
   kind: 'app-router-component';
   params: {
-    Component?: [error: 'Use the `component` parameter instead'];
     component: (props: { children: ReactNode }) => JSX.Element | null;
   };
   output: ExtensionDataRef<
