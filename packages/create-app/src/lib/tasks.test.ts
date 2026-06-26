@@ -299,6 +299,13 @@ describe('tasks', () => {
           version: '1.2.3',
         },
       );
+      await expect(fs.readJson('templatedApp/package.json')).resolves.toEqual(
+        expect.objectContaining({
+          devDependencies: expect.objectContaining({
+            '@types/node': '^22.13.14',
+          }),
+        }),
+      );
       // catalog was populated with `context.name`
       await expect(
         fs.readFile('templatedApp/catalog-info.yaml', 'utf-8'),
