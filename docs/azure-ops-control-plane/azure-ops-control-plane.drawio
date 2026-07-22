@@ -1,0 +1,262 @@
+<mxfile>
+  <diagram id="system-context" name="System Context">
+    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="azure-operator" value="Azure Operator&#xa;[Person]&#xa;Investigates status and requests governed Day 2 operations" style="shape=mxgraph.c4.person2;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#083F75;strokeColor=#06315C;" vertex="1" parent="1">
+          <mxGeometry x="60" y="0" width="200" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="azure-approver" value="Azure Approver&#xa;[Person]&#xa;Reviews immutable plans before any Azure write" style="shape=mxgraph.c4.person2;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#083F75;strokeColor=#06315C;" vertex="1" parent="1">
+          <mxGeometry x="300" y="0" width="200" height="180" as="geometry"/>
+        </mxCell>
+        <UserObject label="Backstage Azure Ops Control Plane&#xa;[Software System]&#xa;Dashboard, status, approvals, audit, and agent command center" link="data:page/id,containers" id="azure-ops-control-plane">
+          <mxCell style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#1061B0;strokeColor=#0D5091;" vertex="1" parent="1">
+          <mxGeometry x="280" y="250" width="240" height="120" as="geometry"/>
+        </mxCell>
+        </UserObject>
+        <mxCell id="azure-management-plane" value="Azure Management Plane&#xa;[Software System]&#xa;ARM, Resource Graph, Monitor, Health, Policy, and Advisor" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#8C8496;strokeColor=#736782;" vertex="1" parent="1">
+          <mxGeometry x="0" y="430" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="microsoft-foundry" value="Microsoft Foundry&#xa;[Software System]&#xa;Evidence-grounded analysis and operation recommendations" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#8C8496;strokeColor=#736782;" vertex="1" parent="1">
+          <mxGeometry x="280" y="430" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="entra-governance" value="Microsoft Entra and PIM&#xa;[Software System]&#xa;Authentication, conditional access, and privileged activation" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#8C8496;strokeColor=#736782;" vertex="1" parent="1">
+          <mxGeometry x="530" y="30" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="enterprise-operations" value="Enterprise Operations Systems&#xa;[Software System]&#xa;On-call, ITSM, IaC pipelines, and break-glass paths" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#8C8496;strokeColor=#736782;" vertex="1" parent="1">
+          <mxGeometry x="550" y="430" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="e0" value="Views evidence and requests operations" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="azure-operator" target="azure-ops-control-plane">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="250" y="230"/><mxPoint x="250" y="290"/><mxPoint x="250" y="290"/><mxPoint x="250" y="290"/><mxPoint x="260" y="290"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e1" value="Approves immutable operation plans" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="azure-approver" target="azure-ops-control-plane">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="400" y="180"/><mxPoint x="400" y="230"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e2" value="Authenticates and supplies group context" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="entra-governance" target="azure-ops-control-plane">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="540" y="210"/><mxPoint x="540" y="290"/><mxPoint x="540" y="290"/><mxPoint x="540" y="290"/><mxPoint x="530" y="290"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e3" value="Reads state and executes approved typed operations" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="azure-ops-control-plane" target="azure-management-plane">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="210" y="330"/><mxPoint x="150" y="330"/><mxPoint x="150" y="330"/><mxPoint x="150" y="330"/><mxPoint x="150" y="420"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e4" value="Sends redacted evidence bundles" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="azure-ops-control-plane" target="microsoft-foundry">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="400" y="370"/><mxPoint x="400" y="420"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e5" value="Links incidents, changes, and escalation" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="azure-ops-control-plane" target="enterprise-operations">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="590" y="330"/><mxPoint x="660" y="330"/><mxPoint x="660" y="330"/><mxPoint x="660" y="330"/><mxPoint x="660" y="420"/></Array></mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="containers" name="Containers">
+    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="azure-ops-frontend" value="Azure Ops Frontend&#xa;[Container: Backstage and React]&#xa;Dashboard, status, approvals, and agent command center" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#23A2D9;strokeColor=#0E7DAD;" vertex="1" parent="1">
+          <mxGeometry x="410" y="0" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <UserObject label="Azure Ops Policy Broker&#xa;[Container: Backstage backend plugin]&#xa;Normalizes evidence and governs operation plans" link="data:page/id,backend-components" id="azure-ops-backend">
+          <mxCell style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#23A2D9;strokeColor=#0E7DAD;" vertex="1" parent="1">
+          <mxGeometry x="550" y="190" width="240" height="120" as="geometry"/>
+        </mxCell>
+        </UserObject>
+        <mxCell id="backstage-catalog" value="Backstage Catalog&#xa;[Container: Backstage catalog]&#xa;Curated ownership and operational scope projection" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#23A2D9;strokeColor=#0E7DAD;" vertex="1" parent="1">
+          <mxGeometry x="0" y="370" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="backstage-database" value="Backstage Database&#xa;[Container: PostgreSQL]&#xa;Approval, incident, projection, and execution metadata" style="shape=cylinder3;size=15;boundedLbl=1;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#23A2D9;strokeColor=#0E7DAD;" vertex="1" parent="1">
+          <mxGeometry x="280" y="370" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="service-bus" value="Operational Event Bus&#xa;[Container: Azure Service Bus]&#xa;Durable normalized alerts and execution requests" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#23A2D9;strokeColor=#0E7DAD;" vertex="1" parent="1">
+          <mxGeometry x="550" y="370" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <UserObject label="Durable Operations Orchestrator&#xa;[Container: Azure Durable Functions]&#xa;Retries, cancellation, postchecks, and executor isolation" link="data:page/id,execution-components" id="durable-orchestrator">
+          <mxCell style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#23A2D9;strokeColor=#0E7DAD;" vertex="1" parent="1">
+          <mxGeometry x="550" y="560" width="240" height="120" as="geometry"/>
+        </mxCell>
+        </UserObject>
+        <mxCell id="azure-data-sources" value="Azure Read Sources&#xa;[Software System]&#xa;Resource Graph, Monitor, Health, Activity Log, Policy, and Advisor" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#8C8496;strokeColor=#736782;" vertex="1" parent="1">
+          <mxGeometry x="690" y="0" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="azure-resource-providers" value="Azure Resource Providers&#xa;[Software System]&#xa;Authoritative APIs for typed resource operations" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#8C8496;strokeColor=#736782;" vertex="1" parent="1">
+          <mxGeometry x="550" y="740" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="foundry-agent" value="Azure Ops Foundry Agent&#xa;[Software System]&#xa;Returns evidence-linked analysis with no write authority" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#8C8496;strokeColor=#736782;" vertex="1" parent="1">
+          <mxGeometry x="830" y="370" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="immutable-audit" value="Immutable Audit Store&#xa;[Container: Azure Blob Storage]&#xa;Append-only operation evidence and outcomes" style="shape=cylinder3;size=15;boundedLbl=1;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#23A2D9;strokeColor=#0E7DAD;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="370" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="e0" value="Authenticated Backstage APIs" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="azure-ops-frontend" target="azure-ops-backend">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="600" y="120"/><mxPoint x="600" y="170"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e1" value="Resolves ownership and operating context" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="azure-ops-backend" target="backstage-catalog">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="390" y="230"/><mxPoint x="120" y="230"/><mxPoint x="120" y="230"/><mxPoint x="120" y="230"/><mxPoint x="120" y="360"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e2" value="Stores projections and governed workflow state" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="azure-ops-backend" target="backstage-database">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="510" y="270"/><mxPoint x="460" y="270"/><mxPoint x="460" y="270"/><mxPoint x="460" y="270"/><mxPoint x="460" y="360"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e3" value="Provides deterministic evidence" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="azure-data-sources" target="azure-ops-backend">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="740" y="120"/><mxPoint x="740" y="170"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e4" value="Sends scoped redacted evidence bundle" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="azure-ops-backend" target="foundry-agent">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="840" y="270"/><mxPoint x="880" y="270"/><mxPoint x="880" y="270"/><mxPoint x="880" y="270"/><mxPoint x="880" y="360"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e5" value="Publishes approved plan" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="azure-ops-backend" target="service-bus">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="710" y="310"/><mxPoint x="710" y="360"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e6" value="Delivers alerts and execution events" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="service-bus" target="azure-ops-backend">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="630" y="370"/><mxPoint x="630" y="320"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e7" value="Delivers approved execution request" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="service-bus" target="durable-orchestrator">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="710" y="490"/><mxPoint x="710" y="540"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e8" value="Uses managed identity and typed APIs" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="durable-orchestrator" target="azure-resource-providers">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="670" y="680"/><mxPoint x="670" y="730"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e9" value="Publishes execution progress" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="durable-orchestrator" target="service-bus">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="630" y="550"/><mxPoint x="630" y="500"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e10" value="Writes correlated operation evidence" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="azure-ops-backend" target="immutable-audit">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="950" y="230"/><mxPoint x="1220" y="230"/><mxPoint x="1220" y="230"/><mxPoint x="1220" y="230"/><mxPoint x="1220" y="360"/></Array></mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="backend-components" name="Backend Components">
+    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="read-adapters" value="Azure Read Adapters&#xa;[Component: Azure SDK and ARM REST]&#xa;Queries and normalizes authoritative Azure evidence" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="140" y="0" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="projection-store" value="Operational Projection Store&#xa;[Component: Knex and PostgreSQL]&#xa;Tracks freshness, incidents, approvals, and execution state" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="140" y="190" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="incident-correlator" value="Incident Correlator&#xa;[Component: Backstage events]&#xa;Deduplicates alerts and maps affected resources to owners" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="0" y="370" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="evidence-builder" value="Evidence Builder&#xa;[Component: Schema-constrained TypeScript]&#xa;Builds scoped and redacted evidence bundles" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="280" y="370" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="foundry-client" value="Foundry Client&#xa;[Component: Foundry Responses API]&#xa;Invokes the versioned agent and validates structured output" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="280" y="560" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="operation-catalog" value="Operation Catalog&#xa;[Component: Backstage Actions Registry]&#xa;Exposes versioned typed read and plan actions" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="280" y="740" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="plan-engine" value="Deterministic Plan Engine&#xa;[Component: TypeScript]&#xa;Validates scope, preconditions, limits, and rollback" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="280" y="930" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="approval-engine" value="Approval Engine&#xa;[Component: Backstage permissions]&#xa;Binds approver decisions to plan hash, TTL, and resource state" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="190" y="1110" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="audit-service" value="Audit Service&#xa;[Component: OpenTelemetry and Blob Storage]&#xa;Emits correlated append-only evidence" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="190" y="1480" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="orchestrator-client" value="Orchestrator Client&#xa;[Component: Service Bus]&#xa;Enqueues only approved immutable plans" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="190" y="1300" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="e0" value="Writes normalized projections" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="read-adapters" target="projection-store">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="260" y="120"/><mxPoint x="260" y="170"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e1" value="Supplies resource and ownership context" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="projection-store" target="incident-correlator">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="190" y="310"/><mxPoint x="190" y="360"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e2" value="Supplies current scoped evidence" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="projection-store" target="evidence-builder">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="330" y="310"/><mxPoint x="330" y="360"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e3" value="Sends redacted evidence" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="evidence-builder" target="foundry-client">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="400" y="490"/><mxPoint x="400" y="540"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e4" value="Suggests allowlisted template IDs" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="foundry-client" target="operation-catalog">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="400" y="680"/><mxPoint x="400" y="730"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e5" value="Requests exact deterministic plan" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="operation-catalog" target="plan-engine">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="400" y="860"/><mxPoint x="400" y="910"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e6" value="Submits immutable plan hash" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="plan-engine" target="approval-engine">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="350" y="1050"/><mxPoint x="350" y="1100"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e7" value="Releases approved plan" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="approval-engine" target="orchestrator-client">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="310" y="1230"/><mxPoint x="310" y="1280"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e8" value="Records planning evidence" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="plan-engine" target="audit-service">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="490" y="1190"/><mxPoint x="490" y="1560"/><mxPoint x="490" y="1560"/><mxPoint x="490" y="1560"/><mxPoint x="440" y="1560"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e9" value="Records approval decision" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="approval-engine" target="audit-service">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="450" y="1170"/><mxPoint x="460" y="1170"/><mxPoint x="460" y="1170"/><mxPoint x="460" y="1170"/><mxPoint x="460" y="1520"/><mxPoint x="460" y="1520"/><mxPoint x="460" y="1520"/><mxPoint x="440" y="1520"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e10" value="Records enqueue result" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="orchestrator-client" target="audit-service">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="310" y="1420"/><mxPoint x="310" y="1470"/></Array></mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="execution-components" name="Execution Components">
+    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="execution-state-machine" value="Execution State Machine&#xa;[Component: Durable Functions]&#xa;Controls retries, cancellation, timeout, and compensation" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="550" y="0" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="execution-guardrails" value="Execution Guardrails&#xa;[Component: Policy and schema validation]&#xa;Revalidates plan hash, TTL, scope, limits, and current state" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="550" y="190" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="compute-executor" value="Compute Executor&#xa;[Component: ARM APIs]&#xa;VM start, restart, and deallocate" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="0" y="370" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="app-executor" value="App Platform Executor&#xa;[Component: ARM APIs]&#xa;App Service, Function App, and Logic App operations" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="280" y="370" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="aks-executor" value="AKS Executor&#xa;[Component: ARM and Kubernetes APIs]&#xa;Cluster, node-pool, and allowlisted workload operations" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="550" y="370" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="container-apps-executor" value="Container Apps Executor&#xa;[Component: ARM APIs]&#xa;Revision, traffic, and scale operations" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="830" y="370" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="policy-executor" value="Policy Remediation Executor&#xa;[Component: Policy Insights API]&#xa;Creates allowlisted scoped remediation tasks" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="370" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="postcondition-verifier" value="Postcondition Verifier&#xa;[Component: Azure SDK and ARM REST]&#xa;Checks actual state and captures before/after evidence" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="550" y="560" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="e0" value="Revalidates approved immutable plan" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="execution-state-machine" target="execution-guardrails">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="670" y="120"/><mxPoint x="670" y="170"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e1" value="Routes compute operation" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="execution-guardrails" target="compute-executor">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="390" y="230"/><mxPoint x="120" y="230"/><mxPoint x="120" y="230"/><mxPoint x="120" y="230"/><mxPoint x="120" y="360"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e2" value="Routes app platform operation" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="execution-guardrails" target="app-executor">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="480" y="270"/><mxPoint x="400" y="270"/><mxPoint x="400" y="270"/><mxPoint x="400" y="270"/><mxPoint x="400" y="360"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e3" value="Routes AKS operation" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="execution-guardrails" target="aks-executor">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="670" y="310"/><mxPoint x="670" y="360"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e4" value="Routes Container Apps operation" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="execution-guardrails" target="container-apps-executor">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="870" y="270"/><mxPoint x="950" y="270"/><mxPoint x="950" y="270"/><mxPoint x="950" y="270"/><mxPoint x="950" y="360"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e5" value="Routes policy remediation" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="execution-guardrails" target="policy-executor">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="950" y="230"/><mxPoint x="1220" y="230"/><mxPoint x="1220" y="230"/><mxPoint x="1220" y="230"/><mxPoint x="1220" y="360"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e6" value="Reports provider operation" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="compute-executor" target="postcondition-verifier">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="120" y="550"/><mxPoint x="120" y="640"/><mxPoint x="120" y="640"/><mxPoint x="120" y="640"/><mxPoint x="540" y="640"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e7" value="Reports provider operation" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="app-executor" target="postcondition-verifier">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="400" y="540"/><mxPoint x="400" y="600"/><mxPoint x="400" y="600"/><mxPoint x="400" y="600"/><mxPoint x="540" y="600"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e8" value="Reports provider operation" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="aks-executor" target="postcondition-verifier">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="670" y="490"/><mxPoint x="670" y="540"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e9" value="Reports provider operation" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="container-apps-executor" target="postcondition-verifier">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="950" y="540"/><mxPoint x="950" y="600"/><mxPoint x="950" y="600"/><mxPoint x="950" y="600"/><mxPoint x="800" y="600"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e10" value="Reports remediation state" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="policy-executor" target="postcondition-verifier">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1220" y="550"/><mxPoint x="1220" y="640"/><mxPoint x="1220" y="640"/><mxPoint x="1220" y="640"/><mxPoint x="800" y="640"/></Array></mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

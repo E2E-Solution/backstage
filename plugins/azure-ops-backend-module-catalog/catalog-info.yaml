@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: internal-backstage-plugin-azure-ops-backend-module-catalog
+  title: '@internal/backstage-plugin-azure-ops-backend-module-catalog'
+  description: Catalog module for curated Azure Ops ownership.
+spec:
+  lifecycle: experimental
+  type: backstage-backend-plugin-module
+  owner: maintainers

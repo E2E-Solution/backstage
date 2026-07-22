@@ -1,0 +1,466 @@
+{
+  "title": "Azure Ops Control Plane",
+  "levels": [
+    {
+      "name": "System Context",
+      "elements": [
+        {
+          "id": "azure-operator",
+          "type": "person",
+          "label": "Azure Operator",
+          "desc": "Investigates status and requests governed Day 2 operations"
+        },
+        {
+          "id": "azure-approver",
+          "type": "person",
+          "label": "Azure Approver",
+          "desc": "Reviews immutable plans before any Azure write"
+        },
+        {
+          "id": "azure-ops-control-plane",
+          "type": "system",
+          "label": "Backstage Azure Ops Control Plane",
+          "desc": "Dashboard, status, approvals, audit, and agent command center",
+          "children": "Containers"
+        },
+        {
+          "id": "azure-management-plane",
+          "type": "external",
+          "label": "Azure Management Plane",
+          "desc": "ARM, Resource Graph, Monitor, Health, Policy, and Advisor"
+        },
+        {
+          "id": "microsoft-foundry",
+          "type": "external",
+          "label": "Microsoft Foundry",
+          "desc": "Evidence-grounded analysis and operation recommendations"
+        },
+        {
+          "id": "entra-governance",
+          "type": "external",
+          "label": "Microsoft Entra and PIM",
+          "desc": "Authentication, conditional access, and privileged activation"
+        },
+        {
+          "id": "enterprise-operations",
+          "type": "external",
+          "label": "Enterprise Operations Systems",
+          "desc": "On-call, ITSM, IaC pipelines, and break-glass paths"
+        }
+      ],
+      "relations": [
+        {
+          "from": "azure-operator",
+          "to": "azure-ops-control-plane",
+          "label": "Views evidence and requests operations"
+        },
+        {
+          "from": "azure-approver",
+          "to": "azure-ops-control-plane",
+          "label": "Approves immutable operation plans"
+        },
+        {
+          "from": "entra-governance",
+          "to": "azure-ops-control-plane",
+          "label": "Authenticates and supplies group context"
+        },
+        {
+          "from": "azure-ops-control-plane",
+          "to": "azure-management-plane",
+          "label": "Reads state and executes approved typed operations"
+        },
+        {
+          "from": "azure-ops-control-plane",
+          "to": "microsoft-foundry",
+          "label": "Sends redacted evidence bundles"
+        },
+        {
+          "from": "azure-ops-control-plane",
+          "to": "enterprise-operations",
+          "label": "Links incidents, changes, and escalation"
+        }
+      ]
+    },
+    {
+      "name": "Containers",
+      "elements": [
+        {
+          "id": "azure-ops-frontend",
+          "type": "container",
+          "label": "Azure Ops Frontend",
+          "tech": "Backstage and React",
+          "desc": "Dashboard, status, approvals, and agent command center"
+        },
+        {
+          "id": "azure-ops-backend",
+          "type": "container",
+          "label": "Azure Ops Policy Broker",
+          "tech": "Backstage backend plugin",
+          "desc": "Normalizes evidence and governs operation plans",
+          "children": "Backend Components"
+        },
+        {
+          "id": "backstage-catalog",
+          "type": "container",
+          "label": "Backstage Catalog",
+          "tech": "Backstage catalog",
+          "desc": "Curated ownership and operational scope projection"
+        },
+        {
+          "id": "backstage-database",
+          "type": "database",
+          "label": "Backstage Database",
+          "tech": "PostgreSQL",
+          "desc": "Approval, incident, projection, and execution metadata"
+        },
+        {
+          "id": "service-bus",
+          "type": "container",
+          "label": "Operational Event Bus",
+          "tech": "Azure Service Bus",
+          "desc": "Durable normalized alerts and execution requests"
+        },
+        {
+          "id": "durable-orchestrator",
+          "type": "container",
+          "label": "Durable Operations Orchestrator",
+          "tech": "Azure Durable Functions",
+          "desc": "Retries, cancellation, postchecks, and executor isolation",
+          "children": "Execution Components"
+        },
+        {
+          "id": "azure-data-sources",
+          "type": "external",
+          "label": "Azure Read Sources",
+          "desc": "Resource Graph, Monitor, Health, Activity Log, Policy, and Advisor"
+        },
+        {
+          "id": "azure-resource-providers",
+          "type": "external",
+          "label": "Azure Resource Providers",
+          "desc": "Authoritative APIs for typed resource operations"
+        },
+        {
+          "id": "foundry-agent",
+          "type": "external",
+          "label": "Azure Ops Foundry Agent",
+          "desc": "Returns evidence-linked analysis with no write authority"
+        },
+        {
+          "id": "immutable-audit",
+          "type": "database",
+          "label": "Immutable Audit Store",
+          "tech": "Azure Blob Storage",
+          "desc": "Append-only operation evidence and outcomes"
+        }
+      ],
+      "relations": [
+        {
+          "from": "azure-ops-frontend",
+          "to": "azure-ops-backend",
+          "label": "Authenticated Backstage APIs"
+        },
+        {
+          "from": "azure-ops-backend",
+          "to": "backstage-catalog",
+          "label": "Resolves ownership and operating context"
+        },
+        {
+          "from": "azure-ops-backend",
+          "to": "backstage-database",
+          "label": "Stores projections and governed workflow state"
+        },
+        {
+          "from": "azure-data-sources",
+          "to": "azure-ops-backend",
+          "label": "Provides deterministic evidence"
+        },
+        {
+          "from": "azure-ops-backend",
+          "to": "foundry-agent",
+          "label": "Sends scoped redacted evidence bundle"
+        },
+        {
+          "from": "azure-ops-backend",
+          "to": "service-bus",
+          "label": "Publishes approved plan"
+        },
+        {
+          "from": "service-bus",
+          "to": "azure-ops-backend",
+          "label": "Delivers alerts and execution events"
+        },
+        {
+          "from": "service-bus",
+          "to": "durable-orchestrator",
+          "label": "Delivers approved execution request"
+        },
+        {
+          "from": "durable-orchestrator",
+          "to": "azure-resource-providers",
+          "label": "Uses managed identity and typed APIs"
+        },
+        {
+          "from": "durable-orchestrator",
+          "to": "service-bus",
+          "label": "Publishes execution progress"
+        },
+        {
+          "from": "azure-ops-backend",
+          "to": "immutable-audit",
+          "label": "Writes correlated operation evidence"
+        }
+      ]
+    },
+    {
+      "name": "Backend Components",
+      "elements": [
+        {
+          "id": "read-adapters",
+          "type": "component",
+          "label": "Azure Read Adapters",
+          "tech": "Azure SDK and ARM REST",
+          "desc": "Queries and normalizes authoritative Azure evidence"
+        },
+        {
+          "id": "projection-store",
+          "type": "component",
+          "label": "Operational Projection Store",
+          "tech": "Knex and PostgreSQL",
+          "desc": "Tracks freshness, incidents, approvals, and execution state"
+        },
+        {
+          "id": "incident-correlator",
+          "type": "component",
+          "label": "Incident Correlator",
+          "tech": "Backstage events",
+          "desc": "Deduplicates alerts and maps affected resources to owners"
+        },
+        {
+          "id": "evidence-builder",
+          "type": "component",
+          "label": "Evidence Builder",
+          "tech": "Schema-constrained TypeScript",
+          "desc": "Builds scoped and redacted evidence bundles"
+        },
+        {
+          "id": "foundry-client",
+          "type": "component",
+          "label": "Foundry Client",
+          "tech": "Foundry Responses API",
+          "desc": "Invokes the versioned agent and validates structured output"
+        },
+        {
+          "id": "operation-catalog",
+          "type": "component",
+          "label": "Operation Catalog",
+          "tech": "Backstage Actions Registry",
+          "desc": "Exposes versioned typed read and plan actions"
+        },
+        {
+          "id": "plan-engine",
+          "type": "component",
+          "label": "Deterministic Plan Engine",
+          "tech": "TypeScript",
+          "desc": "Validates scope, preconditions, limits, and rollback"
+        },
+        {
+          "id": "approval-engine",
+          "type": "component",
+          "label": "Approval Engine",
+          "tech": "Backstage permissions",
+          "desc": "Binds approver decisions to plan hash, TTL, and resource state"
+        },
+        {
+          "id": "audit-service",
+          "type": "component",
+          "label": "Audit Service",
+          "tech": "OpenTelemetry and Blob Storage",
+          "desc": "Emits correlated append-only evidence"
+        },
+        {
+          "id": "orchestrator-client",
+          "type": "component",
+          "label": "Orchestrator Client",
+          "tech": "Service Bus",
+          "desc": "Enqueues only approved immutable plans"
+        }
+      ],
+      "relations": [
+        {
+          "from": "read-adapters",
+          "to": "projection-store",
+          "label": "Writes normalized projections"
+        },
+        {
+          "from": "projection-store",
+          "to": "incident-correlator",
+          "label": "Supplies resource and ownership context"
+        },
+        {
+          "from": "projection-store",
+          "to": "evidence-builder",
+          "label": "Supplies current scoped evidence"
+        },
+        {
+          "from": "evidence-builder",
+          "to": "foundry-client",
+          "label": "Sends redacted evidence"
+        },
+        {
+          "from": "foundry-client",
+          "to": "operation-catalog",
+          "label": "Suggests allowlisted template IDs"
+        },
+        {
+          "from": "operation-catalog",
+          "to": "plan-engine",
+          "label": "Requests exact deterministic plan"
+        },
+        {
+          "from": "plan-engine",
+          "to": "approval-engine",
+          "label": "Submits immutable plan hash"
+        },
+        {
+          "from": "approval-engine",
+          "to": "orchestrator-client",
+          "label": "Releases approved plan"
+        },
+        {
+          "from": "plan-engine",
+          "to": "audit-service",
+          "label": "Records planning evidence"
+        },
+        {
+          "from": "approval-engine",
+          "to": "audit-service",
+          "label": "Records approval decision"
+        },
+        {
+          "from": "orchestrator-client",
+          "to": "audit-service",
+          "label": "Records enqueue result"
+        }
+      ]
+    },
+    {
+      "name": "Execution Components",
+      "elements": [
+        {
+          "id": "execution-state-machine",
+          "type": "component",
+          "label": "Execution State Machine",
+          "tech": "Durable Functions",
+          "desc": "Controls retries, cancellation, timeout, and compensation"
+        },
+        {
+          "id": "execution-guardrails",
+          "type": "component",
+          "label": "Execution Guardrails",
+          "tech": "Policy and schema validation",
+          "desc": "Revalidates plan hash, TTL, scope, limits, and current state"
+        },
+        {
+          "id": "compute-executor",
+          "type": "component",
+          "label": "Compute Executor",
+          "tech": "ARM APIs",
+          "desc": "VM start, restart, and deallocate"
+        },
+        {
+          "id": "app-executor",
+          "type": "component",
+          "label": "App Platform Executor",
+          "tech": "ARM APIs",
+          "desc": "App Service, Function App, and Logic App operations"
+        },
+        {
+          "id": "aks-executor",
+          "type": "component",
+          "label": "AKS Executor",
+          "tech": "ARM and Kubernetes APIs",
+          "desc": "Cluster, node-pool, and allowlisted workload operations"
+        },
+        {
+          "id": "container-apps-executor",
+          "type": "component",
+          "label": "Container Apps Executor",
+          "tech": "ARM APIs",
+          "desc": "Revision, traffic, and scale operations"
+        },
+        {
+          "id": "policy-executor",
+          "type": "component",
+          "label": "Policy Remediation Executor",
+          "tech": "Policy Insights API",
+          "desc": "Creates allowlisted scoped remediation tasks"
+        },
+        {
+          "id": "postcondition-verifier",
+          "type": "component",
+          "label": "Postcondition Verifier",
+          "tech": "Azure SDK and ARM REST",
+          "desc": "Checks actual state and captures before/after evidence"
+        }
+      ],
+      "relations": [
+        {
+          "from": "execution-state-machine",
+          "to": "execution-guardrails",
+          "label": "Revalidates approved immutable plan"
+        },
+        {
+          "from": "execution-guardrails",
+          "to": "compute-executor",
+          "label": "Routes compute operation"
+        },
+        {
+          "from": "execution-guardrails",
+          "to": "app-executor",
+          "label": "Routes app platform operation"
+        },
+        {
+          "from": "execution-guardrails",
+          "to": "aks-executor",
+          "label": "Routes AKS operation"
+        },
+        {
+          "from": "execution-guardrails",
+          "to": "container-apps-executor",
+          "label": "Routes Container Apps operation"
+        },
+        {
+          "from": "execution-guardrails",
+          "to": "policy-executor",
+          "label": "Routes policy remediation"
+        },
+        {
+          "from": "compute-executor",
+          "to": "postcondition-verifier",
+          "label": "Reports provider operation"
+        },
+        {
+          "from": "app-executor",
+          "to": "postcondition-verifier",
+          "label": "Reports provider operation"
+        },
+        {
+          "from": "aks-executor",
+          "to": "postcondition-verifier",
+          "label": "Reports provider operation"
+        },
+        {
+          "from": "container-apps-executor",
+          "to": "postcondition-verifier",
+          "label": "Reports provider operation"
+        },
+        {
+          "from": "policy-executor",
+          "to": "postcondition-verifier",
+          "label": "Reports remediation state"
+        }
+      ]
+    }
+  ]
+}

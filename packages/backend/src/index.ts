@@ -42,10 +42,14 @@ const searchLoader = createBackendFeatureLoader({
 backend.add(import('@backstage/plugin-auth-backend'));
 backend.add(import('./authModuleGithubProvider'));
 backend.add(import('@backstage/plugin-auth-backend-module-guest-provider'));
+backend.add(import('@backstage/plugin-auth-backend-module-microsoft-provider'));
 backend.add(import('@backstage/plugin-auth-backend-module-openshift-provider'));
 backend.add(import('@backstage/plugin-app-backend'));
 backend.add(import('@backstage/plugin-catalog-backend-module-unprocessed'));
 backend.add(import('@backstage/plugin-catalog-backend-module-ai-model'));
+backend.add(
+  import('@internal/backstage-plugin-azure-ops-backend-module-catalog'),
+);
 backend.add(
   import('@backstage/plugin-catalog-backend-module-scaffolder-entity-model'),
 );
@@ -55,7 +59,9 @@ backend.add(import('@backstage/plugin-events-backend'));
 backend.add(import('@backstage/plugin-devtools-backend'));
 backend.add(import('@backstage/plugin-kubernetes-backend'));
 backend.add(
-  import('@backstage/plugin-permission-backend-module-allow-all-policy'),
+  import(
+    '@internal/backstage-plugin-azure-ops-backend-module-permission-policy'
+  ),
 );
 backend.add(import('@backstage/plugin-permission-backend'));
 backend.add(import('@backstage/plugin-proxy-backend'));
@@ -75,4 +81,5 @@ backend.add(import('@backstage/plugin-notifications-backend'));
 backend.add(import('@backstage/plugin-events-backend-module-google-pubsub'));
 backend.add(import('@backstage/plugin-mcp-actions-backend'));
 backend.add(import('@backstage/plugin-user-settings-backend'));
+backend.add(import('@internal/backstage-plugin-azure-ops-backend'));
 backend.start();

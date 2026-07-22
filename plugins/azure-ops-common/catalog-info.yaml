@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: internal-backstage-plugin-azure-ops-common
+  title: '@internal/backstage-plugin-azure-ops-common'
+  description: Common functionalities for the azure-ops plugin
+spec:
+  lifecycle: experimental
+  type: backstage-common-library
+  owner: maintainers
