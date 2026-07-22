@@ -1,29 +1,38 @@
 {
   "name": "@internal/backstage-plugin-azure-ops-backend-module-catalog",
   "version": "0.1.0",
-  "license": "Apache-2.0",
-  "private": true,
   "description": "Catalog module for curated Azure Ops ownership.",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
-  "publishConfig": {
-    "access": "public",
-    "main": "dist/index.cjs.js",
-    "types": "dist/index.d.ts"
-  },
   "backstage": {
     "role": "backend-plugin-module",
     "pluginId": "catalog",
     "pluginPackage": "@backstage/plugin-catalog-backend"
   },
+  "publishConfig": {
+    "access": "public",
+    "main": "dist/index.cjs.js",
+    "types": "dist/index.d.ts"
+  },
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/backstage/backstage",
+    "directory": "plugins/azure-ops-backend-module-catalog"
+  },
+  "license": "Apache-2.0",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "files": [
+    "config.d.ts",
+    "dist"
+  ],
   "scripts": {
-    "start": "backstage-cli package start",
     "build": "backstage-cli package build",
-    "lint": "backstage-cli package lint",
-    "test": "backstage-cli package test",
     "clean": "backstage-cli package clean",
+    "lint": "backstage-cli package lint",
     "prepack": "backstage-cli package prepack",
-    "postpack": "backstage-cli package postpack"
+    "postpack": "backstage-cli package postpack",
+    "start": "backstage-cli package start",
+    "test": "backstage-cli package test"
   },
   "dependencies": {
     "@backstage/backend-plugin-api": "workspace:^",
@@ -36,9 +45,5 @@
     "@backstage/backend-test-utils": "workspace:^",
     "@backstage/cli": "workspace:^"
   },
-  "files": [
-    "config.d.ts",
-    "dist"
-  ],
   "configSchema": "config.d.ts"
 }
