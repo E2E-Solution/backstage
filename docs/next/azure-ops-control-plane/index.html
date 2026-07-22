@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-azure-ops-control-plane/azure-ops-control-plane" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">Azure operations control plane | Backstage Software Catalog and Developer Platform</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://backstage.io/img/sharing-opengraph.png"><meta data-rh="true" name="twitter:image" content="https://backstage.io/img/sharing-opengraph.png"><meta data-rh="true" property="og:url" content="https://backstage.io/docs/next/azure-ops-control-plane/"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Azure operations control plane | Backstage Software Catalog and Developer Platform"><meta data-rh="true" name="description" content="Architecture and delivery plan for a governed Azure operations experience built with Backstage and Microsoft Foundry"><meta data-rh="true" property="og:description" content="Architecture and delivery plan for a governed Azure operations experience built with Backstage and Microsoft Foundry"><link data-rh="true" rel="icon" href="/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://backstage.io/docs/next/azure-ops-control-plane/"><link data-rh="true" rel="alternate" href="https://backstage.io/docs/next/azure-ops-control-plane/" hreflang="en"><link data-rh="true" rel="alternate" href="https://backstage.io/docs/next/azure-ops-control-plane/" hreflang="x-default"><link data-rh="true" rel="preconnect" href="https://JCMFNHCHI8-dsn.algolia.net" crossorigin="anonymous"><link rel="alternate" type="application/rss+xml" href="/blog/rss.xml" title="Backstage Software Catalog and Developer Platform RSS Feed">
+<link rel="alternate" type="application/atom+xml" href="/blog/atom.xml" title="Backstage Software Catalog and Developer Platform Atom Feed">
+
+<link rel="preconnect" href="https://www.google-analytics.com">
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KSEVGGNCJW"></script>
+<script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-KSEVGGNCJW",{})</script>
+
+
+
+<link rel="search" type="application/opensearchdescription+xml" title="Backstage Software Catalog and Developer Platform" href="/opensearch.xml">
+
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pushfeedback@latest/dist/pushfeedback/pushfeedback.css">
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Backstage","url":"https://backstage.io","description":"Backstage is an open source developer portal framework that centralizes your software catalog, unifies infrastructure tools, and helps teams ship high-quality code faster.","image":"https://backstage.io/img/sharing-opengraph.png","publisher":{"@type":"Organization","name":"Spotify","url":"https://spotify.github.io/"}}</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono:500,700&display=swap">
+<script src="https://buttons.github.io/buttons.js"></script>
+<script src="https://unpkg.com/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script src="/js/medium-zoom.js"></script>
+<script src="/js/dismissable-banner.js"></script>
+<script src="/js/scroll-nav-to-view-in-docs.js"></script>
+<script src="https://widget.kapa.ai/kapa-widget.bundle.js" data-website-id="4f3b7b51-4ea6-4a5b-aede-44fbe128c0f2" data-project-name="Backstage" data-project-color="#36baa2" data-project-logo="https://backstage.io/img/favicon.svg" data-launcher-button-image="https://backstage.io/img/favicon.svg" data-button-position-bottom="4rem" data-button-position-right="0.75rem" data-color-scheme-selector="[data-theme=&#39;dark&#39;]" data-example-questions="What is Backstage?,How do I get started?" async></script><link rel="stylesheet" href="/assets/css/styles.a3f04945.css">
+<script src="/assets/js/runtime~main.ece8c0de.js" defer="defer"></script>
+<script src="/assets/js/main.9504031f.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||"dark"),document.documentElement.setAttribute("data-theme-choice",t||"dark")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/"><div class="navbar__logo"><img src="/img/logo-black.svg" alt="Backstage Software Catalog and Developer Platform" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/img/logo.svg" alt="Backstage Software Catalog and Developer Platform" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div></a><a class="navbar__item navbar__link" href="/docs/landing-page/doc-landing-page">Docs</a><a class="navbar__item navbar__link" href="/plugins">Plugins</a><div class="navbar__item dropdown dropdown--hoverable"><a href="#" aria-haspopup="true" aria-expanded="false" role="button" class="navbar__link">Reference</a><ul class="dropdown__menu"><li><a href="https://backstage.io/api/stable" target="_self" rel="noopener noreferrer" class="dropdown__link">Stable (v1.53.0)<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li><a href="https://backstage.io/api/next" target="_self" rel="noopener noreferrer" class="dropdown__link">Next<svg width="12" height="12" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><a class="navbar__item navbar__link" href="/docs/releases/v1.53.0">Releases</a><a class="navbar__item navbar__link" href="/blog">Blog</a><a class="navbar__item navbar__link" href="/demos">Demos</a><a class="navbar__item navbar__link" href="/community">Community</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/backstage/backstage" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link header-github-link" aria-label="GitHub repository" title="GitHub repository"></a><a href="https://discord.gg/backstage-687207715902193673" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link header-discord-link" aria-label="Discord community" title="Discord community"></a><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a aria-current="page" class="navbar__link active" aria-haspopup="true" aria-expanded="false" role="button" href="/docs/next/azure-ops-control-plane/">Next</a><ul class="dropdown__menu"><li><a aria-current="page" class="dropdown__link dropdown__link--active" href="/docs/next/azure-ops-control-plane/">Next</a></li><li><a class="dropdown__link" href="/docs/overview/what-is-backstage">Stable</a></li></ul></div><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><button type="button" class="DocSearch DocSearch-Button" aria-label="Search (Meta+k)" aria-keyshortcuts="Meta+k"><span class="DocSearch-Button-Container"><svg width="20" height="20" class="DocSearch-Search-Icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8" stroke="currentColor" fill="none" stroke-width="1.4"></circle><path d="m21 21-4.3-4.3" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg><span class="DocSearch-Button-Placeholder">Search</span></span><span class="DocSearch-Button-Keys"></span></button></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><main class="docMainContainer_TBSr docMainContainerEnhanced_lQrH"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_xLCN"><div class="theme-doc-version-banner alert alert--warning margin-bottom--md" role="alert"><div>This is unreleased documentation for <!-- -->Backstage Software Catalog and Developer Platform<!-- --> <b>Next</b> version.</div><div class="margin-top--md">For up-to-date documentation, see the <b><a href="/docs/overview/what-is-backstage">latest version</a></b> (<!-- -->Stable<!-- -->).</div></div><div class="docItemContainer_jfFK"><article><span class="theme-doc-version-badge badge badge--secondary">Version: Next</span><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><div class="row"><div class="col col--12 markdown"><header><h1>Azure operations control plane</h1></header>
+<p>Backstage can provide a unified experience for Azure Day 2 operations when it
+is positioned as an <em>operations experience and governance plane</em>. Azure remains
+the authoritative management and telemetry plane.</p>
+<p>The target experience combines:</p>
+<ul>
+<li class="">A cross-subscription <strong>Dashboard</strong> for inventory, health, alerts, compliance,
+and recommended work.</li>
+<li class="">A <strong>Status</strong> view for incidents, affected resources, owners, recent changes,
+and operational procedures.</li>
+<li class="">An <strong>Agent Command Center</strong> for evidence-grounded analysis, deterministic
+operation plans, approval, progress, and audit.</li>
+</ul>
+<div class="theme-admonition theme-admonition-caution admonition_xJq3 alert alert--warning"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path></svg></span>caution</div><div class="admonitionContent_BuS1"><p>Microsoft Foundry does not authorize or directly execute Azure changes. Every
+write uses a versioned operation template, deterministic validation, and human
+approval in Backstage.</p></div></div>
+<p><img decoding="async" loading="lazy" alt="Azure operations control plane C4 architecture" src="/assets/images/azure-ops-control-plane.drawio-3e78f9fe38b4174e8ab87fc91dbbf4f2.png" width="1585" height="1105" class="img_ev3q"></p>
+<p>The editable diagram contains four drill-down pages: system context, containers,
+Backstage backend components, and execution components.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="positioning">Positioning<a href="#positioning" class="hash-link" aria-label="Direct link to Positioning" title="Direct link to Positioning" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Backstage provides</th><th>Azure or enterprise systems remain authoritative</th></tr></thead><tbody><tr><td>Dashboard, status, and command experience</td><td>Azure Resource Manager and resource-provider APIs</td></tr><tr><td>Curated ownership and operating context</td><td>Azure Resource Graph live inventory</td></tr><tr><td>Request policy and human approval</td><td>Microsoft Entra ID, Privileged Identity Management, and Azure Role-Based Access Control</td></tr><tr><td>Versioned operation templates</td><td>Azure Policy, resource locks, and provider preconditions</td></tr><tr><td>Incident correlation and notifications</td><td>Azure Monitor, Resource Health, and Service Health</td></tr><tr><td>Evidence-linked agent assistance</td><td>Microsoft Foundry models, identity, tracing, and evaluation</td></tr><tr><td>Correlated audit experience</td><td>Immutable audit storage and enterprise compliance retention</td></tr></tbody></table>
+<p>Backstage does not replace Azure Portal, Azure Monitor, Sentinel, an IT service
+management system, Infrastructure as Code pipelines, or break-glass access.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="architecture-responsibilities">Architecture responsibilities<a href="#architecture-responsibilities" class="hash-link" aria-label="Direct link to Architecture responsibilities" title="Direct link to Architecture responsibilities" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="experience-plane">Experience plane<a href="#experience-plane" class="hash-link" aria-label="Direct link to Experience plane" title="Direct link to Experience plane" translate="no">​</a></h3>
+<p>The <code>azure-ops</code> frontend plugin adds the Dashboard, Status, approval queue,
+execution history, and Agent Command Center to the new Backstage frontend
+system. Existing Backstage notifications and signals provide in-product updates.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="policy-broker">Policy broker<a href="#policy-broker" class="hash-link" aria-label="Direct link to Policy broker" title="Direct link to Policy broker" translate="no">​</a></h3>
+<p>The <code>azure-ops-backend</code> plugin acts as a policy broker. It:</p>
+<ul>
+<li class="">Queries and normalizes Azure evidence.</li>
+<li class="">Resolves curated catalog ownership context.</li>
+<li class="">Builds redacted evidence bundles for Foundry.</li>
+<li class="">Generates exact deterministic operation plans.</li>
+<li class="">Enforces operation, scope, environment, and resource-count limits.</li>
+<li class="">Binds approval to a plan hash, expiry, parameters, and observed resource state.</li>
+<li class="">Publishes only approved plans to a durable orchestrator.</li>
+<li class="">Records correlated planning, approval, execution, and verification evidence.</li>
+</ul>
+<p>The current example application&#x27;s allow-all permission policy is not suitable
+for this role. The production application must use permissions for reading,
+proposing, requesting approval, approving, canceling, executing, and auditing.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="azure-read-plane">Azure read plane<a href="#azure-read-plane" class="hash-link" aria-label="Direct link to Azure read plane" title="Direct link to Azure read plane" translate="no">​</a></h3>
+<p><a href="https://learn.microsoft.com/azure/governance/resource-graph/overview" target="_blank" rel="noopener noreferrer" class="">Azure Resource Graph</a>
+supports broad inventory and governance queries across the allowed
+subscriptions. Resource Graph is eventually consistent and throttled, so
+resource-provider APIs supply authoritative operation preconditions and
+verification criteria.</p>
+<p>The read plane also uses:</p>
+<ul>
+<li class=""><a href="https://learn.microsoft.com/azure/azure-monitor/alerts/alerts-overview" target="_blank" rel="noopener noreferrer" class="">Azure Monitor alerts</a>
+and the <a href="https://learn.microsoft.com/azure/azure-monitor/alerts/alerts-common-schema" target="_blank" rel="noopener noreferrer" class="">common alert schema</a>.</li>
+<li class=""><a href="https://learn.microsoft.com/azure/service-health/resource-health-overview" target="_blank" rel="noopener noreferrer" class="">Azure Resource Health</a>
+and <a href="https://learn.microsoft.com/azure/service-health/overview" target="_blank" rel="noopener noreferrer" class="">Azure Service Health</a>.</li>
+<li class=""><a href="https://learn.microsoft.com/azure/azure-monitor/essentials/activity-log" target="_blank" rel="noopener noreferrer" class="">Azure Activity Log</a>.</li>
+<li class=""><a href="https://learn.microsoft.com/azure/governance/policy/overview" target="_blank" rel="noopener noreferrer" class="">Azure Policy</a>
+and <a href="https://learn.microsoft.com/azure/governance/policy/how-to/remediate-resources" target="_blank" rel="noopener noreferrer" class="">policy remediation</a>.</li>
+<li class=""><a href="https://learn.microsoft.com/azure/advisor/advisor-overview" target="_blank" rel="noopener noreferrer" class="">Azure Advisor</a>.</li>
+</ul>
+<p>Each projection includes its source and freshness. The user interface must
+surface partial results, throttling, and stale data instead of presenting them
+as healthy or complete.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="catalog-projection">Catalog projection<a href="#catalog-projection" class="hash-link" aria-label="Direct link to Catalog projection" title="Direct link to Catalog projection" translate="no">​</a></h3>
+<p>The Backstage Catalog stores curated ownership and operating context. Standard
+<code>Resource</code> entities can represent subscriptions, resource groups, workloads, or
+selected managed resources with an Azure resource ID annotation.</p>
+<p>The catalog is not a complete cloud asset database, and catalog ownership must
+not grant Azure authorization. Live resource inventory remains in Resource
+Graph and the Azure Ops projection store.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="event-and-workflow-plane">Event and workflow plane<a href="#event-and-workflow-plane" class="hash-link" aria-label="Direct link to Event and workflow plane" title="Direct link to Event and workflow plane" translate="no">​</a></h3>
+<p>Azure Monitor Action Groups send the common alert schema to a secured ingress.
+The ingress normalizes and publishes events through Azure Service Bus. The
+backend correlates alerts, updates incidents, and sends Backstage notifications.</p>
+<p>The Backstage scheduler can initiate bounded refresh and reconciliation work.
+Long-running execution, retries, cancellation, and verification checks belong
+in a durable workflow service such as Azure Durable Functions.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="microsoft-foundry">Microsoft Foundry<a href="#microsoft-foundry" class="hash-link" aria-label="Direct link to Microsoft Foundry" title="Direct link to Microsoft Foundry" translate="no">​</a></h3>
+<p><a href="https://learn.microsoft.com/azure/foundry/agents/overview" target="_blank" rel="noopener noreferrer" class="">Microsoft Foundry Agent Service</a>
+provides prompt and hosted agents, managed identity, tracing, evaluation, and
+remote Model Context Protocol (MCP) tools.</p>
+<p>The initial integration uses a safer evidence-bundle flow:</p>
+<ol>
+<li class="">Backstage resolves the selected scope and retrieves current evidence.</li>
+<li class="">Backstage removes secrets and sensitive payloads.</li>
+<li class="">Backstage invokes a versioned Foundry agent with a structured bundle.</li>
+<li class="">The agent returns a schema-constrained summary, hypotheses, confidence,
+evidence references, and suggested operation-template identifiers.</li>
+<li class="">Backstage validates the suggestion and creates the exact plan independently.</li>
+<li class="">A human approves the immutable plan before execution.</li>
+</ol>
+<p>The existing Backstage Actions Registry and MCP Actions Backend can later expose
+a separate read-only server. Foundry supports
+<a href="https://learn.microsoft.com/azure/foundry/agents/how-to/tools/model-context-protocol" target="_blank" rel="noopener noreferrer" class="">remote MCP servers</a>,
+including Microsoft Entra authentication. Destructive actions remain unavailable
+to the agent.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="use-case-model">Use-case model<a href="#use-case-model" class="hash-link" aria-label="Direct link to Use-case model" title="Direct link to Use-case model" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Use case</th><th>Deterministic capability</th><th>Agent assistance</th><th>Initial execution</th></tr></thead><tbody><tr><td>Cross-subscription inventory</td><td>Resource Graph query, pagination, cache, and freshness</td><td>Summarize posture</td><td>Read-only</td></tr><tr><td>Health and status</td><td>Monitor, Health, and Activity Log normalization</td><td>Correlate signals and explain impact</td><td>Read-only</td></tr><tr><td>Alert triage</td><td>Deduplication, ownership mapping, and runbook lookup</td><td>Summarize and propose evidence-linked hypotheses</td><td>Read-only</td></tr><tr><td>Policy compliance</td><td>Policy Insights query and scoped candidate list</td><td>Group and explain recommendations</td><td>Read-only</td></tr><tr><td>Policy remediation</td><td>Validate assignment, scope, and remediation parameters</td><td>Explain expected impact</td><td>Human-approved</td></tr><tr><td>Advisor recommendations</td><td>Retrieve and classify recommendations</td><td>Prioritize with workload context</td><td>Read-only or human-approved follow-up</td></tr><tr><td>Virtual Machine operations</td><td>Typed start, restart, and <code>deallocate</code> APIs</td><td>Recommend an allowed template</td><td>Human-approved</td></tr><tr><td>App Service and Function Apps</td><td>Typed start, stop, and restart APIs</td><td>Explain current evidence and risk</td><td>Human-approved</td></tr><tr><td>Logic Apps</td><td>Typed trigger and selected run APIs</td><td>Summarize failed workflow evidence</td><td>Human-approved</td></tr><tr><td>Azure Kubernetes Service</td><td>Typed Azure Resource Manager and Kubernetes APIs</td><td>Correlate cluster and workload evidence</td><td>Human-approved</td></tr><tr><td>Azure Container Apps</td><td>Typed revision, traffic, and scale APIs</td><td>Explain revision and traffic risk</td><td>Human-approved</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="security-model">Security model<a href="#security-model" class="hash-link" aria-label="Direct link to Security model" title="Direct link to Security model" translate="no">​</a></h2>
+<ul>
+<li class="">Authenticate operators through Microsoft Entra ID and map groups to Backstage
+permissions.</li>
+<li class="">Use Conditional Access and Privileged Identity Management for privileged
+roles.</li>
+<li class="">Use explicit managed identities in production. Do not use a production
+credential fallback chain.</li>
+<li class="">Create separate custom Azure roles and managed identities for inventory,
+orchestration, governance, and each resource-family executor.</li>
+<li class="">Assign roles at the narrowest practical scope and avoid wildcard permissions.</li>
+<li class="">Give the Foundry agent no Azure write role.</li>
+<li class="">Revalidate plan hash, expiry, scope, limits, current state, and resource
+version immediately before execution.</li>
+<li class="">Require a new plan and approval when evidence or state changes.</li>
+<li class="">Use idempotency keys, bounded retries, timeouts, cancellation, and circuit
+breakers.</li>
+<li class="">Prefer Azure SDK or REST APIs. Do not expose free-form Azure CLI, <code>kubectl</code>,
+shell, or model-generated scripts.</li>
+<li class="">Export append-only audit evidence to immutable Blob Storage.</li>
+</ul>
+<p>See <a href="https://learn.microsoft.com/azure/role-based-access-control/best-practices" target="_blank" rel="noopener noreferrer" class="">Azure Role-Based Access Control best practices</a>
+and <a href="https://learn.microsoft.com/entra/identity/managed-identities-azure-resources/overview" target="_blank" rel="noopener noreferrer" class="">managed identities</a>
+for the underlying Azure controls.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="delivery-stages">Delivery stages<a href="#delivery-stages" class="hash-link" aria-label="Direct link to Delivery stages" title="Direct link to Delivery stages" translate="no">​</a></h2>
+<ol>
+<li class="">Establish the architecture, threat model, operation catalog, sandbox scopes,
+custom roles, and success measures.</li>
+<li class="">Deliver a read-only vertical slice for inventory, health, alerts, Policy,
+Advisor, ownership, Dashboard, and Status.</li>
+<li class="">Add event normalization, incident correlation, permissions, approvals,
+immutable audit, and a durable execution interface.</li>
+<li class="">Add deterministic actions in waves: Virtual Machines and App Service;
+Function Apps and Logic Apps; Azure Kubernetes Service and Azure Container
+Apps; Policy remediation.</li>
+<li class="">Add the evidence-grounded Foundry command experience, tracing, evaluation,
+and an optional read-only MCP surface.</li>
+<li class="">Complete negative authorization, replay, throttling, stale-approval,
+failure-mode, prompt-injection, load, and rollout testing.</li>
+</ol>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="validation-gates">Validation gates<a href="#validation-gates" class="hash-link" aria-label="Direct link to Validation gates" title="Direct link to Validation gates" translate="no">​</a></h2>
+<p>The control plane is ready to expand only when:</p>
+<ul>
+<li class="">Inventory coverage and freshness meet the agreed targets across every allowed
+subscription.</li>
+<li class="">Every write has an authorized requester, an authorized approver, an immutable
+plan hash, current preconditions, and complete before-and-after evidence.</li>
+<li class="">No agent identity or MCP endpoint can invoke a destructive action.</li>
+<li class="">Replayed alerts and retried executions produce no duplicate side effects.</li>
+<li class="">Negative Role-Based Access Control tests prove each executor cannot act
+outside its resource family or assigned scope.</li>
+<li class="">Provider and network failures remain visible and never become successful
+results.</li>
+<li class="">Agent summaries and recommendations meet versioned evidence-grounding and
+operation-selection thresholds.</li>
+</ul></div></div></div><div class="row"><div class="col col--12"><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/backstage/backstage/edit/master/docs/azure-ops-control-plane/index.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></div></div></article><div class="row"><div class="col col--12"><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"></nav></div></div></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#positioning" class="table-of-contents__link toc-highlight">Positioning</a></li><li><a href="#architecture-responsibilities" class="table-of-contents__link toc-highlight">Architecture responsibilities</a><ul><li><a href="#experience-plane" class="table-of-contents__link toc-highlight">Experience plane</a></li><li><a href="#policy-broker" class="table-of-contents__link toc-highlight">Policy broker</a></li><li><a href="#azure-read-plane" class="table-of-contents__link toc-highlight">Azure read plane</a></li><li><a href="#catalog-projection" class="table-of-contents__link toc-highlight">Catalog projection</a></li><li><a href="#event-and-workflow-plane" class="table-of-contents__link toc-highlight">Event and workflow plane</a></li><li><a href="#microsoft-foundry" class="table-of-contents__link toc-highlight">Microsoft Foundry</a></li></ul></li><li><a href="#use-case-model" class="table-of-contents__link toc-highlight">Use-case model</a></li><li><a href="#security-model" class="table-of-contents__link toc-highlight">Security model</a></li><li><a href="#delivery-stages" class="table-of-contents__link toc-highlight">Delivery stages</a></li><li><a href="#validation-gates" class="table-of-contents__link toc-highlight">Validation gates</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title"></div><ul class="footer__items clean-list"><li class="footer__item">
+                <a href="/" aria-label="Backstage Home">
+                  <div class="footerLogo"></div>
+                </a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/docs/overview/what-is-backstage">What is Backstage?</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/getting-started/">Getting started</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/features/software-catalog/">Software Catalog</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/plugins/create-a-plugin">Create a Plugin</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/dls/design">Designing for Backstage</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://discord.gg/backstage-687207715902193673" target="_blank" rel="noopener noreferrer" class="footer__link-item">Support chatroom</a></li><li class="footer__item"><a href="https://github.com/backstage/backstage/blob/master/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer" class="footer__link-item">Contributing</a></li><li class="footer__item"><a href="https://backstage.io/docs/getting-started/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Adopting</a></li><li class="footer__item"><a href="https://spoti.fi/backstagenewsletter" target="_blank" rel="noopener noreferrer" class="footer__link-item">Subscribe to our newsletter</a></li><li class="footer__item"><a href="https://www.cncf.io/projects/" target="_blank" rel="noopener noreferrer" class="footer__link-item">CNCF Incubation</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/backstage/" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub</a></li><li class="footer__item"><a href="https://github.com/cncf/artwork/tree/main/projects/backstage" target="_blank" rel="noopener noreferrer" class="footer__link-item">Assets</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright"><p style="text-align:center"><a href="https://spotify.github.io/">Made with ❤️ at Spotify</a></p><p class="copyright">Copyright © 2026 Backstage Project Authors. All rights reserved. The Linux Foundation has registered trademarks and uses trademarks. For a list of trademarks of The Linux Foundation, please see our Trademark Usage page: <a href="https://www.linuxfoundation.org/trademark-usage">https://www.linuxfoundation.org/trademark-usage</p></div></div></div></footer></div>
+<script type="module" src="https://cdn.jsdelivr.net/npm/pushfeedback@latest/dist/pushfeedback/pushfeedback.esm.js"></script>
+<script>const feedbackButton=document.createElement("feedback-button");feedbackButton.setAttribute("project","q8w1i6cair"),feedbackButton.setAttribute("modal-position","bottom-right"),feedbackButton.setAttribute("button-style","dark"),feedbackButton.setAttribute("button-position","bottom-right"),feedbackButton.setAttribute("hide-icon","true"),feedbackButton.setAttribute("custom-font","true"),feedbackButton.setAttribute("rating-mode","stars"),feedbackButton.setAttribute("id","default"),feedbackButton.textContent="Feedback",document.body.appendChild(feedbackButton)</script></body>
+</html>
