@@ -16,7 +16,6 @@
 
 import { renderInTestApp } from '@backstage/frontend-test-utils';
 import { fireEvent, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import type {
   AzureAnalysisResponse,
   AzureOperationPlan,
@@ -116,31 +115,26 @@ describe('CommandCenter', () => {
       error: 'Parameters must be a JSON object.',
     });
     const api = createApi();
-    const user = userEvent.setup();
     await renderInTestApp(<CommandCenter api={api} />);
 
     const template = await screen.findByLabelText('Operation template');
-    await user.click(template);
-    await user.click(
-      await screen.findByRole('option', {
-        name: /Restart virtual machine/,
-      }),
+    fireEvent.mouseDown(template);
+    fireEvent.click(
+      await screen.findByRole('option', { name: /Restart virtual machine/ }),
     );
     fireEvent.change(screen.getByLabelText(/Azure resource ID/), {
       target: { value: resourceId },
     });
     const parameters = screen.getByLabelText(/Parameters JSON/);
     fireEvent.change(parameters, { target: { value: '{broken' } });
-    await user.click(
-      await screen.findByRole('button', { name: 'Create plan' }),
-    );
+    fireEvent.click(await screen.findByRole('button', { name: 'Create plan' }));
     expect(
       await screen.findByText(/Parameters are not valid JSON/),
     ).toBeInTheDocument();
     expect(api.createPlan).not.toHaveBeenCalled();
 
     fireEvent.change(parameters, { target: { value: '{}' } });
-    await user.click(screen.getByRole('button', { name: 'Create plan' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Create plan' }));
 
     expect(
       await screen.findByText('Deterministic operation plan'),
@@ -158,38 +152,33 @@ describe('CommandCenter', () => {
 
   it('clears stale plan and approval state before local validation', async () => {
     const api = createApi();
-    const user = userEvent.setup();
     await renderInTestApp(<CommandCenter api={api} />);
 
-    await user.click(await screen.findByLabelText('Operation template'));
-    await user.click(
-      await screen.findByRole('option', {
-        name: /Restart virtual machine/,
-      }),
+    fireEvent.mouseDown(await screen.findByLabelText('Operation template'));
+    fireEvent.click(
+      await screen.findByRole('option', { name: /Restart virtual machine/ }),
     );
     fireEvent.change(screen.getByLabelText(/Azure resource ID/), {
       target: { value: resourceId },
     });
-    await user.click(screen.getByRole('button', { name: 'Create plan' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Create plan' }));
     expect(
       await screen.findByText('Deterministic operation plan'),
     ).toBeInTheDocument();
 
-    await user.click(screen.getByRole('button', { name: 'Request approval' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Request approval' }));
     expect(
       screen.getByText(
         `Request approval for ${plan.templateId} on ${plan.resourceId}?`,
         { exact: false },
       ),
     ).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: 'Go back' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Go back' }));
 
     fireEvent.change(screen.getByLabelText(/Parameters JSON/), {
       target: { value: '{broken' },
     });
-    await user.click(
-      await screen.findByRole('button', { name: 'Create plan' }),
-    );
+    fireEvent.click(await screen.findByRole('button', { name: 'Create plan' }));
 
     expect(
       await screen.findByText(/Parameters are not valid JSON/),
@@ -216,7 +205,6 @@ describe('CommandCenter', () => {
 
   it('renders an evidence-linked recommendation without creating a plan', async () => {
     const api = createApi();
-    const user = userEvent.setup();
     await renderInTestApp(<CommandCenter api={api} />);
 
     fireEvent.change(await screen.findByLabelText('Analysis question'), {
@@ -225,7 +213,7 @@ describe('CommandCenter', () => {
     fireEvent.change(screen.getByLabelText('Analysis resource IDs'), {
       target: { value: resourceId },
     });
-    await user.click(
+    fireEvent.click(
       screen.getByRole('button', { name: 'Analyze with Foundry' }),
     );
 
