@@ -179,6 +179,22 @@ backend:
     # TODO: once plugins have been migrated we can remove this, but right now it
     # is require for the backend-next to work in this repo
     dangerouslyDisableDefaultAuthPolicy: true
+    # Production Azure Monitor ingress adapters and durable orchestrator
+    # callbacks must use separate SERVICE credentials restricted to the
+    # azure-ops plugin. Keep tokens in environment-backed secrets.
+    # externalAccess:
+    #   - type: static
+    #     options:
+    #       token: ${AZURE_MONITOR_INGRESS_TOKEN}
+    #       subject: external:azure-monitor-ingress
+    #     accessRestrictions:
+    #       - plugin: azure-ops
+    #   - type: static
+    #     options:
+    #       token: ${AZURE_ORCHESTRATOR_CALLBACK_TOKEN}
+    #       subject: external:azure-ops-orchestrator
+    #     accessRestrictions:
+    #       - plugin: azure-ops
 
   baseUrl: http://localhost:7007
   listen:
@@ -204,6 +220,90 @@ backend:
       - catalog
       - scaffolder
       - search
+
+azureOps:
+  enabled: true
+  # Local POC only. Production always uses managed identity for Resource Graph.
+  servicePrincipal:
+    tenantId: ${AUTH_MICROSOFT_TENANT_ID}
+    clientId: ${AUTH_MICROSOFT_CLIENT_ID}
+    clientSecret: ${AUTH_MICROSOFT_CLIENT_SECRET}
+  # POST /api/azure-ops/events/azure-monitor accepts the bounded Azure Monitor
+  # common alert schema from an authenticated ingress adapter only. It is not a
+  # public Action Group webhook. Scope the adapter's external access method to
+  # plugin `azure-ops` under backend.auth.externalAccess above, and repeat its
+  # exact subject here. An absent allowlist fails closed.
+  # ingress:
+  #   azureMonitor:
+  #     allowedSubjects:
+  #       - external:azure-monitor-ingress
+  catalog:
+    targets: []
+    # targets:
+    #   - resourceId: /subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/operations
+    #     name: operations-rg
+    #     owner: group:default/cloud-platform
+    #     type: azure-resource-group
+    #     system: system:default/operations
+    #     description: Curated operating context for the operations resource group
+    #     tags:
+    #       - azure
+    #       - production
+  authorization:
+    # Development only: production deployments must remove all guest access.
+    readers:
+      - group:default/azure-ops-readers
+      - user:default/sithukyaw
+      - user:default/guest
+      - user:development/guest
+    operators:
+      - group:default/azure-ops-operators
+      - user:default/sithukyaw
+      - user:default/guest
+      - user:development/guest
+    approvers:
+      - group:default/azure-ops-approvers
+    auditors:
+      - group:default/azure-ops-auditors
+      - user:default/sithukyaw
+      - user:default/guest
+      - user:development/guest
+  subscriptions:
+    - b70fcef1-9e03-4184-9321-4266c7b469ab
+    - 17694922-0107-4007-9f3d-e23257657fe2
+  refresh:
+    frequency: 5m
+    timeout: 45s
+    # Each page contains up to 1,000 rows. The value is bounded to 1-500.
+    maxPages: 100
+  plans:
+    ttl: 30m
+    maxResourceCount: 20
+  # foundry:
+  #   projectEndpoint: https://<resource>.services.ai.azure.com/api/projects/<project>
+  #   promptAgentName: <read-only-prompt-agent-name>
+  #   managedIdentityClientId: <optional-user-assigned-managed-identity-client-id>
+  # orchestrator:
+  #   endpoint: https://<orchestrator-host>/api/dispatch
+  #   audience: api://<orchestrator-application-id>
+  #   managedIdentityClientId: <optional-orchestrator-user-assigned-identity-client-id>
+  #   # Must be distinct from Azure Monitor ingress subjects.
+  #   callbackAllowedSubjects:
+  #     - external:azure-ops-orchestrator
+
+mcpActions:
+  servers:
+    azure-ops-read:
+      name: 'Azure Ops Read'
+      description: 'Read-only Azure inventory and operational summaries'
+      filter:
+        include:
+          - id: 'azure-ops:*'
+            attributes:
+              readOnly: true
+        exclude:
+          - attributes:
+              destructive: true
 # See README.md in the proxy-backend plugin for information on the configuration format
 proxy:
   endpoints:
@@ -425,6 +525,12 @@ auth:
         clientId: ${AUTH_MICROSOFT_CLIENT_ID}
         clientSecret: ${AUTH_MICROSOFT_CLIENT_SECRET}
         tenantId: ${AUTH_MICROSOFT_TENANT_ID}
+        signIn:
+          resolvers:
+            # Development only: production must ingest users into the catalog
+            # and remove dangerouslyAllowSignInWithoutUserInCatalog.
+            - resolver: emailLocalPartMatchingUserEntityName
+              dangerouslyAllowSignInWithoutUserInCatalog: true
     onelogin:
       development:
         clientId: ${AUTH_ONELOGIN_CLIENT_ID}
