@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: internal-backstage-plugin-azure-ops-backend-module-permission-policy
+  title: '@internal/backstage-plugin-azure-ops-backend-module-permission-policy'
+  description: Azure Ops permission policy module for the permission plugin.
+spec:
+  lifecycle: experimental
+  type: backstage-backend-plugin-module
+  owner: maintainers

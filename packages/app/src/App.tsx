@@ -51,8 +51,10 @@ import { convertLegacyEntityContentExtension } from '@backstage/plugin-catalog-r
 import { pluginInfoResolver } from './pluginInfoResolver';
 import { appModuleNav } from './modules/appModuleNav';
 import { appModuleScaffolder } from './modules/appModuleScaffolder';
+import { appModuleSignIn } from './modules/appModuleSignIn';
 import catalogPlugin from '@backstage/plugin-catalog/alpha';
 import InfoIcon from '@material-ui/icons/Info';
+import azureOpsPlugin from '@internal/backstage-plugin-azure-ops';
 
 /**
  * TechDocs does support the new frontend system so this conversion is not
@@ -139,9 +141,11 @@ const app = createApp({
     homePlugin,
     appVisualizerPlugin,
     kubernetesPlugin,
+    azureOpsPlugin,
     notFoundErrorPageModule,
     appModuleNav,
     appModuleScaffolder,
+    appModuleSignIn,
     customHomePageModule,
     ...collectedLegacyPlugins,
   ],
